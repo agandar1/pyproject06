@@ -1,1 +1,1 @@
-# pyproject06
+# python-project06
