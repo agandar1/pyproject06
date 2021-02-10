@@ -5,7 +5,10 @@ from pygame.locals import *
 
 tile_size = 50
 tile_list = []
+blue_dots = []
 
+
+# define the map
 # Columns    1  2  3  4  5  6  7  8  9 10 11 12 13 14 15 16 17 18 19 20    Rows
 map_data = [[ 0,   0,   0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0],   # 1
             [ 0,   0,   0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0],   # 2
@@ -42,53 +45,54 @@ blc = pygame.image.load('assets/BLC.png')
 rwtc = pygame.image.load('assets/RwTC.png')
 lwbc = pygame.image.load('assets/LwBC.png')
 
+# create tiles from the map
 row_count = 0
 for row in map_data:
     col_count = 0
-    for tile in row:
-        if tile == 0:
+    for tilenum in row:
+        if tilenum == 0:
             img = pygame.transform.scale(empty, (tile_size, tile_size))
-        if (tile == 1) and ((row_count + col_count) % 2 == 0):
+        if (tilenum == 1) and ((row_count + col_count) % 2 == 0):
             img = pygame.transform.scale(light_bg, (tile_size, tile_size))
-        if (tile == 1) and ((row_count + col_count) % 2 != 0):
+        if (tilenum == 1) and ((row_count + col_count) % 2 != 0):
             img = pygame.transform.scale(dark_bg, (tile_size, tile_size))
-        if tile == 2:
+        if tilenum == 2:
             img = pygame.transform.scale(goal, (tile_size, tile_size))
-        if tile == 3:
+        if tilenum == 3:
             img = pygame.transform.scale(tw, (tile_size, tile_size))
-        if tile == 4:
+        if tilenum == 4:
             img = pygame.transform.scale(rw, (tile_size, tile_size))
-        if tile == 5:
+        if tilenum == 5:
             img = pygame.transform.scale(bw, (tile_size, tile_size))
-        if tile == 6:
+        if tilenum == 6:
             img = pygame.transform.scale(lw, (tile_size, tile_size))
-        if tile == 7:
+        if tilenum == 7:
             img = pygame.transform.scale(tlw, (tile_size, tile_size))
-        if tile == 8:
+        if tilenum == 8:
             img = pygame.transform.scale(brw, (tile_size, tile_size))
-        if tile == 9:
+        if tilenum == 9:
             img = pygame.transform.scale(trlw, (tile_size, tile_size))
-        if tile == 10:
+        if tilenum == 10:
             img = pygame.transform.scale(brlw, (tile_size, tile_size))
-        if tile == 11:
+        if tilenum == 11:
             img = pygame.transform.scale(rlw, (tile_size, tile_size))
-        if tile == 12:
+        if tilenum == 12:
             img = pygame.transform.scale(trc, (tile_size, tile_size))
-        if tile == 13:
+        if tilenum == 13:
             img = pygame.transform.scale(tlc, (tile_size, tile_size))
-        if tile == 14:
+        if tilenum == 14:
             img = pygame.transform.scale(brc, (tile_size, tile_size))
-        if tile == 15:
+        if tilenum == 15:
             img = pygame.transform.scale(blc, (tile_size, tile_size))
-        if tile == 16:
+        if tilenum == 16:
             img = pygame.transform.scale(rwtc, (tile_size, tile_size))
-        if tile == 17:
+        if tilenum == 17:
             img = pygame.transform.scale(lwbc, (tile_size, tile_size))
 
         img_rect = img.get_rect()
         img_rect.x = col_count * tile_size
         img_rect.y = row_count * tile_size
-        tile = (img, img_rect)
+        tile = (img, img_rect, tilenum)
         tile_list.append(tile)
         col_count += 1
     row_count += 1
