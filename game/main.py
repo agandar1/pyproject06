@@ -2,6 +2,7 @@
 # Main Game File
 import pygame
 from pygame.locals import *
+import levels.lvl1
 
 # Colors
 BLACK = (0, 0, 0)
@@ -19,16 +20,33 @@ WIDTH, HEIGHT = 1000, 600
 WIN = pygame.display.set_mode((WIDTH, HEIGHT))
 pygame.display.set_caption("World's Hardest Game")
 
+# Game Variables
+tile_size = 50
 
-def draw_window():
+
+class World:
+    "Class to draw the map"
+    def __init__(self, data):
+        self.tile_list = data
+
+    def draw(self):
+        "Draw all the tiles"
+        for tile in self.tile_list:
+            WIN.blit(tile[0], tile[1])
+
+
+def draw_window(world):
     "Update the Screen"
-    WIN.fill(PURPLE)
+    world.draw()
     pygame.display.update()
 
 
 def main():
     "Main Game Function"
     # some setup
+    level = 1
+    lvl1 = levels.lvl1.tile_list
+    world = World(lvl1)
     clock = pygame.time.Clock()
     run = True
 
@@ -38,7 +56,7 @@ def main():
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 run = False
-        draw_window()
+        draw_window(world)
     pygame.quit()
 
 
