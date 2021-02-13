@@ -93,7 +93,7 @@ class MyGameWindow(arcade.Window):
 
     # game variables
     game_over = False
-    level = 5
+    level = 1
     max_level = 30
 
     physics_engine = None
