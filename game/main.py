@@ -1,70 +1,10 @@
 #!/usr/bin/env python3
 import math
 import arcade
+from levels import levels
 
 WIDTH = 1000
 HEIGHT = 600
-mid_x = [25, 75, 125, 175, 225, 275, 325, 375, 425, 475, 525, 575, 625, 675, 725, 775, 825, 875, 925, 975]
-mid_y = [25, 75, 125, 175, 225, 275, 325, 375, 425, 475, 525, 575]
-int_x = [0, 50, 100, 150, 200, 250, 300, 350, 400, 450, 500, 550, 600, 650, 700, 750, 800, 850, 900, 950, 1000]
-int_y = [0, 50, 100, 150, 200, 250, 300, 350, 400, 450, 500, 550]
-
-
-class CircleDot(arcade.Sprite):
-    "blue dots that go in a circle"
-    def __init__(self, centerPoint, radius, angle, speed):
-        "constructor"
-        super().__init__("assets/BLUE_DOT.png", 1)
-        self.circle_angle = angle
-        self.circle_radius = radius
-        self.circle_speed = speed
-        self.circle_center_x = centerPoint[0]
-        self.circle_center_y = centerPoint[1]
-
-    def update(self):
-        "update the dot's position"
-        self.center_x = self.circle_radius * math.sin(self.circle_angle) + self.circle_center_x
-        self.center_y = self.circle_radius * math.cos(self.circle_angle) + self.circle_center_y
-
-        self.circle_angle += self.circle_speed
-
-
-class PathDot(arcade.Sprite):
-    "blue dots that follow a path"
-    def __init__(self, pointList, speed):
-        super().__init__("assets/BLUE_DOT.png", 1)
-        self.pointList = pointList
-        self.centerPoint = [self.pointList[0][0], self.pointList[0][1]]
-        self.counter = 1
-        self.goal = pointList[1]
-        self.speed = speed
-        self.setCenter()
-
-    def setCenter(self):
-        "set the center coordinates for the dot"
-        self.center_x = self.centerPoint[0]
-        self.center_y = self.centerPoint[1]
-
-    def update(self):
-        "move the dot"
-        for i in range(2):
-            if self.centerPoint[i] > self.goal[i]:
-                self.centerPoint[i] -= self.speed
-            elif self.centerPoint[i] < self.goal[i]:
-                self.centerPoint[i] += self.speed
-            if 0 < abs(self.centerPoint[i] - self.goal[i]) < self.speed + 1:
-                self.centerPoint[i] = self.goal[i]
-                self.counter += 1
-                self.goal = self.pointList[self.counter % len(self.pointList)]
-        self.setCenter()
-
-
-class Coin(arcade.Sprite):
-    "yellow dots that dont move"
-    def __init__(self, centerPoint):
-        super().__init__("assets/YELLOW_DOT.png", 1)
-        self.center_x = centerPoint[0]
-        self.center_y = centerPoint[1]
 
 
 class MyGameWindow(arcade.Window):
@@ -80,7 +20,7 @@ class MyGameWindow(arcade.Window):
     level_coins = None
 
     # setup player
-    spawn_points = None
+    spawn_points = []
     p_speed = 175
     deaths = 0
     player_sprite = None
@@ -103,193 +43,6 @@ class MyGameWindow(arcade.Window):
         self.set_location(400, 200)
         self.setup()
 
-    def level1(self):
-        "load player and dots for level 1"
-        # load the player
-        self.spawn_points = [(mid_x[2], mid_y[6])]
-        speed = 7
-
-        # start the dots for level 1
-        # dot = dottype(list of points, speed)
-        dot = PathDot([(mid_x[14], mid_y[7]), (mid_x[5], mid_y[7])], speed)
-        # add the dot to the dot list
-        self.blue_list.append(dot)
-        dot = PathDot([(mid_x[14], mid_y[5]), (mid_x[5], mid_y[5])], speed)
-        self.blue_list.append(dot)
-        dot = PathDot([(mid_x[5], mid_y[6]), (mid_x[14], mid_y[6])], speed)
-        self.blue_list.append(dot)
-        dot = PathDot([(mid_x[5], mid_y[4]), (mid_x[14], mid_y[4])], speed)
-        self.blue_list.append(dot)
-
-    def level2(self):
-        "load player and dots for level 2"
-        self.spawn_points = [(mid_x[2], int_y[6])]
-        speed = 5
-
-        dot = PathDot([(mid_x[4], mid_y[3]), (mid_x[4], mid_y[8])], speed)
-        self.blue_list.append(dot)
-        dot = PathDot([(mid_x[6], mid_y[3]), (mid_x[6], mid_y[8])], speed)
-        self.blue_list.append(dot)
-        dot = PathDot([(mid_x[8], mid_y[3]), (mid_x[8], mid_y[8])], speed)
-        self.blue_list.append(dot)
-        dot = PathDot([(mid_x[10], mid_y[3]), (mid_x[10], mid_y[8])], speed)
-        self.blue_list.append(dot)
-        dot = PathDot([(mid_x[12], mid_y[3]), (mid_x[12], mid_y[8])], speed)
-        self.blue_list.append(dot)
-        dot = PathDot([(mid_x[14], mid_y[3]), (mid_x[14], mid_y[8])], speed)
-        self.blue_list.append(dot)
-        dot = PathDot([(mid_x[5], mid_y[8]), (mid_x[5], mid_y[3])], speed)
-        self.blue_list.append(dot)
-        dot = PathDot([(mid_x[7], mid_y[8]), (mid_x[7], mid_y[3])], speed)
-        self.blue_list.append(dot)
-        dot = PathDot([(mid_x[9], mid_y[8]), (mid_x[9], mid_y[3])], speed)
-        self.blue_list.append(dot)
-        dot = PathDot([(mid_x[11], mid_y[8]), (mid_x[11], mid_y[3])], speed)
-        self.blue_list.append(dot)
-        dot = PathDot([(mid_x[13], mid_y[8]), (mid_x[13], mid_y[3])], speed)
-        self.blue_list.append(dot)
-        dot = PathDot([(mid_x[15], mid_y[8]), (mid_x[15], mid_y[3])], speed)
-        self.blue_list.append(dot)
-
-        coin = Coin((int_x[10], int_y[6]))
-        self.level_coins.append(coin)
-        self.coin_list.append(coin)
-
-    def level3(self):
-        "load player and dots for level 3"
-        self.spawn_points = [(int_x[10], int_y[6])]
-        speed = 3
-
-        dot = PathDot([(mid_x[9], mid_y[7]), (mid_x[11], mid_y[7]), (mid_x[11], mid_y[4]), (mid_x[8], mid_y[4]), (mid_x[8], mid_y[7])], speed)
-        self.blue_list.append(dot)
-        dot = PathDot([(mid_x[10], mid_y[7]), (mid_x[11], mid_y[7]), (mid_x[11], mid_y[4]), (mid_x[8], mid_y[4]), (mid_x[8], mid_y[7])], speed)
-        self.blue_list.append(dot)
-        dot = PathDot([(mid_x[11], mid_y[7]), (mid_x[11], mid_y[4]), (mid_x[8], mid_y[4]), (mid_x[8], mid_y[7])], speed)
-        self.blue_list.append(dot)
-        dot = PathDot([(mid_x[11], mid_y[6]), (mid_x[11], mid_y[4]), (mid_x[8], mid_y[4]), (mid_x[8], mid_y[7]), (mid_x[11], mid_y[7])], speed)
-        self.blue_list.append(dot)
-        dot = PathDot([(mid_x[11], mid_y[5]), (mid_x[11], mid_y[4]), (mid_x[8], mid_y[4]), (mid_x[8], mid_y[7]), (mid_x[11], mid_y[7])], speed)
-        self.blue_list.append(dot)
-        dot = PathDot([(mid_x[11], mid_y[4]), (mid_x[8], mid_y[4]), (mid_x[8], mid_y[7]), (mid_x[11], mid_y[7])], speed)
-        self.blue_list.append(dot)
-        dot = PathDot([(mid_x[10], mid_y[4]), (mid_x[8], mid_y[4]), (mid_x[8], mid_y[7]), (mid_x[11], mid_y[7]), (mid_x[11], mid_y[4])], speed)
-        self.blue_list.append(dot)
-        dot = PathDot([(mid_x[9], mid_y[4]), (mid_x[8], mid_y[4]), (mid_x[8], mid_y[7]), (mid_x[11], mid_y[7]), (mid_x[11], mid_y[4])], speed)
-        self.blue_list.append(dot)
-        dot = PathDot([(mid_x[8], mid_y[4]), (mid_x[8], mid_y[7]), (mid_x[11], mid_y[7]), (mid_x[11], mid_y[4])], speed)
-        self.blue_list.append(dot)
-        dot = PathDot([(mid_x[8], mid_y[5]), (mid_x[8], mid_y[7]), (mid_x[11], mid_y[7]), (mid_x[11], mid_y[4]), (mid_x[8], mid_y[4])], speed)
-        self.blue_list.append(dot)
-        dot = PathDot([(mid_x[8], mid_y[6]), (mid_x[8], mid_y[7]), (mid_x[11], mid_y[7]), (mid_x[11], mid_y[4]), (mid_x[8], mid_y[4])], speed)
-        self.blue_list.append(dot)
-
-        coin = Coin((mid_x[8], mid_y[8]))
-        self.level_coins.append(coin)
-        self.coin_list.append(coin)
-
-    def level4(self):
-        "load player and dots for level 4"
-        self.spawn_points = [(int_x[10], int_y[10])]
-        speed = 0.035
-        d90 = math.pi / 2
-        d180 = math.pi
-        d270 = math.pi + (math.pi / 2)
-
-        dot = PathDot([(int_x[10], int_y[5]), (int_x[10], int_y[5])], speed)
-        self.blue_list.append(dot)
-        dot = CircleDot((int_x[10], int_y[5]), 35, 0, speed)
-        self.blue_list.append(dot)
-        dot = CircleDot((int_x[10], int_y[5]), 35, d90, speed)
-        self.blue_list.append(dot)
-        dot = CircleDot((int_x[10], int_y[5]), 35, d180, speed)
-        self.blue_list.append(dot)
-        dot = CircleDot((int_x[10], int_y[5]), 35, d270, speed)
-        self.blue_list.append(dot)
-        dot = CircleDot((int_x[10], int_y[5]), 70, 0, speed)
-        self.blue_list.append(dot)
-        dot = CircleDot((int_x[10], int_y[5]), 70, d90, speed)
-        self.blue_list.append(dot)
-        dot = CircleDot((int_x[10], int_y[5]), 70, d180, speed)
-        self.blue_list.append(dot)
-        dot = CircleDot((int_x[10], int_y[5]), 70, d270, speed)
-        self.blue_list.append(dot)
-        dot = CircleDot((int_x[10], int_y[5]), 105, 0, speed)
-        self.blue_list.append(dot)
-        dot = CircleDot((int_x[10], int_y[5]), 105, d90, speed)
-        self.blue_list.append(dot)
-        dot = CircleDot((int_x[10], int_y[5]), 105, d180, speed)
-        self.blue_list.append(dot)
-        dot = CircleDot((int_x[10], int_y[5]), 105, d270, speed)
-        self.blue_list.append(dot)
-        dot = CircleDot((int_x[10], int_y[5]), 140, 0, speed)
-        self.blue_list.append(dot)
-        dot = CircleDot((int_x[10], int_y[5]), 140, d90, speed)
-        self.blue_list.append(dot)
-        dot = CircleDot((int_x[10], int_y[5]), 140, d180, speed)
-        self.blue_list.append(dot)
-        dot = CircleDot((int_x[10], int_y[5]), 140, d270, speed)
-        self.blue_list.append(dot)
-        dot = CircleDot((int_x[10], int_y[5]), 175, 0, speed)
-        self.blue_list.append(dot)
-        dot = CircleDot((int_x[10], int_y[5]), 175, d90, speed)
-        self.blue_list.append(dot)
-        dot = CircleDot((int_x[10], int_y[5]), 175, d180, speed)
-        self.blue_list.append(dot)
-        dot = CircleDot((int_x[10], int_y[5]), 175, d270, speed)
-        self.blue_list.append(dot)
-
-        coin = Coin((int_x[10], int_y[8]))
-        self.level_coins.append(coin)
-        self.coin_list.append(coin)
-        coin = Coin((int_x[13], int_y[5]))
-        self.level_coins.append(coin)
-        self.coin_list.append(coin)
-        coin = Coin((int_x[10], int_y[2]))
-        self.level_coins.append(coin)
-        self.coin_list.append(coin)
-
-    def level5(self):
-        "load player and dots for level 5"
-        self.spawn_points = [(int_x[2], mid_y[10]), (mid_x[17], mid_y[10]), (mid_x[1], mid_y[8])]
-
-        speed = 0.025
-        d90 = math.pi / 2
-        d180 = math.pi
-        d270 = math.pi + (math.pi / 2)
-
-        dot = CircleDot((int_x[10], int_y[6]), 75, 0, speed)
-        self.blue_list.append(dot)
-        dot = CircleDot((int_x[10], int_y[6]), 75, d90, speed)
-        self.blue_list.append(dot)
-        dot = CircleDot((int_x[10], int_y[6]), 75, d180, speed)
-        self.blue_list.append(dot)
-        dot = CircleDot((int_x[10], int_y[6]), 75, d270, speed)
-        self.blue_list.append(dot)
-        dot = CircleDot((int_x[10], int_y[6]), 175, 0, speed)
-        self.blue_list.append(dot)
-        dot = CircleDot((int_x[10], int_y[6]), 175, d90, speed)
-        self.blue_list.append(dot)
-        dot = CircleDot((int_x[10], int_y[6]), 175, d180, speed)
-        self.blue_list.append(dot)
-        dot = CircleDot((int_x[10], int_y[6]), 175, d270, speed)
-        self.blue_list.append(dot)
-        dot = CircleDot((int_x[10], int_y[6]), 275, 0, speed)
-        self.blue_list.append(dot)
-        dot = CircleDot((int_x[10], int_y[6]), 275, d90, speed)
-        self.blue_list.append(dot)
-        dot = CircleDot((int_x[10], int_y[6]), 275, d180, speed)
-        self.blue_list.append(dot)
-        dot = CircleDot((int_x[10], int_y[6]), 275, d270, speed)
-        self.blue_list.append(dot)
-        dot = CircleDot((int_x[10], int_y[6]), 375, 0, speed)
-        self.blue_list.append(dot)
-        dot = CircleDot((int_x[10], int_y[6]), 375, d90, speed)
-        self.blue_list.append(dot)
-        dot = CircleDot((int_x[10], int_y[6]), 375, d180, speed)
-        self.blue_list.append(dot)
-        dot = CircleDot((int_x[10], int_y[6]), 375, d270, speed)
-        self.blue_list.append(dot)
-
     def setup(self):
         "set up the game"
         self.empty_list = arcade.SpriteList()
@@ -304,15 +57,15 @@ class MyGameWindow(arcade.Window):
 
     def load_level(self, level):
         "load a specific level"
-        levels = {
-            "1": self.level1,
-            "2": self.level2,
-            "3": self.level3,
-            "4": self.level4,
-            "5": self.level5
+        level_list = {
+            "1": levels.level1,
+            "2": levels.level2,
+            "3": levels.level3,
+            "4": levels.level4,
+            "5": levels.level5
         }
         my_map = arcade.tilemap.read_tmx(f"levels/lvl{level}.tmx")
-        levels[str(level)]()
+        level_list[str(level)](self)
 
         # load the player
         self.player_sprite = arcade.Sprite("assets/PLAYER.png", 1.15)
