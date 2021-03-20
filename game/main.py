@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+
 import math
 import arcade
 from levels import levels
@@ -62,7 +63,8 @@ class MyGameWindow(arcade.Window):
             "2": levels.level2,
             "3": levels.level3,
             "4": levels.level4,
-            "5": levels.level5
+            "5": levels.level5,
+            "6": levels.level6
         }
         my_map = arcade.tilemap.read_tmx(f"levels/lvl{level}.tmx")
         level_list[str(level)](self)

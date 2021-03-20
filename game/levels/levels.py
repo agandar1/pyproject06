@@ -110,3 +110,41 @@ def level5(game):
         for angle in angles:
             dot = dots.CircleDot((int_x[10], int_y[6]), radius, angle, speed)
             game.blue_list.append(dot)
+
+
+def level6(game):
+   "load player and dots for level 6"
+   game.spawn_points = [(int_x[3],int_y[8])]
+   speed = 0.035
+   radiuses = [35, 70, 105] 
+   coins = [(mid_x[2], mid_y[5]),
+            (mid_x[6], mid_y[5]), 
+            (mid_x[10], mid_y[5]),
+            (mid_x[14], mid_y[5])]
+ 
+   dot = dots.PathDot([(int_x[8], int_y[9]), (int_x[8], int_y[9])], speed)
+   game.blue_list.append(dot)
+
+   dot = dots.PathDot([(int_x[12], int_y[9]), (int_x[12], int_y[9])], speed)
+   game.blue_list.append(dot)
+
+   dot = dots.PathDot([(int_x[16], int_y[9]), (int_x[16], int_y[9])], speed)
+   game.blue_list.append(dot)
+
+   angle = [0, ((dots.d180+dots.d90)/2.0), ((dots.d270+dots.d180)/2.0)]
+   angle1 = [dots.d180, dots.d90/2.0, dots.d270/(6.0/7.0)]
+
+   for radius in radiuses:
+      for x in range(len(angle)):
+         dot = dots.CircleDot((int_x[8], int_y[9]), radius, angle[x], speed)
+         game.blue_list.append(dot)
+         dot = dots.CircleDot((int_x[12], int_y[9]), radius, angle1[x], speed)
+         game.blue_list.append(dot)
+         dot = dots.CircleDot((int_x[16], int_y[9]), radius, angle[x], speed)
+         game.blue_list.append(dot)
+
+   for coinPoint in coins:
+      coin = dots.Coin(coinPoint)
+      game.level_coins.append(coin)
+      game.coin_list.append(coin)
+
