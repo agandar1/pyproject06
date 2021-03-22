@@ -2,14 +2,18 @@
 import math
 import arcade
 
-d90 = math.pi / 2
-d180 = math.pi
-d270 = math.pi + (math.pi / 2)
+pi = math.pi
+d60 = pi / 3
+d90 = pi / 2
+d120 = (2 * pi) / 3
+d240 = (4 * pi) / 3
+d180 = pi
+d270 = pi + (pi / 2)
 
 
 class CircleDot(arcade.Sprite):
     "blue dots that go in a circle"
-    def __init__(self, centerPoint, radius, angle, speed):
+    def __init__(self, centerPoint, radius, angle, speed, clockwise=True):
         "constructor"
         super().__init__("assets/BLUE_DOT.png", 1)
         self.circle_angle = angle
@@ -17,13 +21,17 @@ class CircleDot(arcade.Sprite):
         self.circle_speed = speed
         self.circle_center_x = centerPoint[0]
         self.circle_center_y = centerPoint[1]
+        self.clockwise = clockwise
 
     def update(self):
         "update the dot's position"
         self.center_x = self.circle_radius * math.sin(self.circle_angle) + self.circle_center_x
         self.center_y = self.circle_radius * math.cos(self.circle_angle) + self.circle_center_y
 
-        self.circle_angle += self.circle_speed
+        if self.clockwise:
+            self.circle_angle += self.circle_speed
+        else:
+            self.circle_angle -= self.circle_speed
 
 
 class PathDot(arcade.Sprite):

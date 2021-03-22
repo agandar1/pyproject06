@@ -1,22 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.4" tiledversion="1.4.2" orientation="orthogonal" renderorder="right-down" width="20" height="12" tilewidth="50" tileheight="50" infinite="0" nextlayerid="12" nextobjectid="1">
+<map version="1.4" tiledversion="1.4.3" orientation="orthogonal" renderorder="right-down" width="20" height="12" tilewidth="50" tileheight="50" infinite="0" nextlayerid="12" nextobjectid="1">
  <tileset firstgid="1" source="mymap.tsx"/>
- <layer id="11" name="empty" width="20" height="12">
+ <layer id="11" name="empty" width="20" height="12" visible="0">
   <data encoding="base64" compression="zlib">
    eJyzZGBgsKQDNgdiKxJoQuaRYpY5Fd1FyH3kmIXPfdTC6G4mlU+tcMMVfpSYhS38Brv7qIUBRyA1Ow==
   </data>
  </layer>
- <layer id="8" name="walls" width="20" height="12">
+ <layer id="8" name="walls" width="20" height="12" visible="0">
   <data encoding="base64" compression="zlib">
    eJxjYMAEegwMC4wYGA6QgoF6DmAxCgyA8gtwyeHRk4DLPfoUmkeOe+hpni3Qj4ZA2hgoZgShHxDDtyHgPn208CPEN0CK06EUfoPdPD0InyKsBzUPAPI/Mi0=
   </data>
  </layer>
  <layer id="9" name="checkpoint" width="20" height="12">
   <data encoding="base64" compression="zlib">
-   eJxjYBiZwAKKB6t5o2AUEAMATh4A4Q==
+   eJxjYBiZwAKKB6t55ILh6q9RgB0AANttAcE=
   </data>
  </layer>
- <layer id="10" name="goal" width="20" height="12">
+ <layer id="10" name="goal" width="20" height="12" visible="0">
   <data encoding="base64" compression="zlib">
    eJxjYBgFwwlYQPFgNW8UUBcAAJEPAOE=
   </data>
