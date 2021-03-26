@@ -133,8 +133,8 @@ For the program to run, you need to have python3 and the arcade library installe
 <!-- CONTACT -->
 ## Contact
 
-Alfonso Barrera -
-Hugo Franco Rodriguez - 
+Alfonso Barrera - a.barrera.29123@gmail.com 
+Hugo Franco Rodriguez - hugo_afranco@hotmail.com
 Adan Gandarilla - agandarilla0502@gmail.com
 
 Project Link: [https://github.com/agandar1/pyproject06](https://github.com/agandar1/pyproject06)
@@ -142,6 +142,9 @@ Project Link: [https://github.com/agandar1/pyproject06](https://github.com/agand
 
 <!-- MARKDOWN LINKS & IMAGES -->
 <!-- https://www.markdownguide.org/basic-syntax/#reference-style-links -->
+[alfonso-link]:https://github.com/null-integer
+[hugo-link]:https://github.com/HugoFranc
+[adan-link]:https://github.com/agandar1
 [contributors-shield]: https://img.shields.io/github/contributors/agandar1/pyproject06.svg?style=for-the-badge
 [contributors-url]: https://github.com/agandar1/pyproject06/graphs/contributors
 [issues-shield]: https://img.shields.io/github/issues/agandar1/pyproject06.svg?style=for-the-badge
