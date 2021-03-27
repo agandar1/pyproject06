@@ -177,7 +177,7 @@ def level7(game):
 def level8(game):
     "load player and dots for level 8"
     game.spawn_points = [(mid_x[5], mid_y[9])]
-    speed = [5,6]
+    speed = [4,4]
 
     dot = dots.PathDot([(mid_x[7], mid_y[9]), (mid_x[10], mid_y[9]), (mid_x[10], mid_y[2]), (mid_x[7], mid_y[2])], speed[0])
     game.blue_list.append(dot)
