@@ -13,7 +13,7 @@ def level1(game):
     "load player and dots for level 1"
     # load the player
     game.spawn_points = [(mid_x[2], mid_y[6])]
-    speed = 7
+    speed = 5
 
     # start the dots for level 1
     # dot = dottype(list of points, speed)
