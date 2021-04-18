@@ -35,7 +35,7 @@ class MyGameWindow(arcade.Window):
     # game variables
     game_over = False
     level = 1
-    max_level = 8
+    max_level = 9
 
     physics_engine = None
 
@@ -66,7 +66,8 @@ class MyGameWindow(arcade.Window):
             "5": levels.level5,
             "6": levels.level6,
             "7": levels.level7,
-            "8": levels.level8
+            "8": levels.level8,
+            "9": levels.level9
         }
         my_map = arcade.tilemap.read_tmx(f"levels/lvl{level}.tmx")
         level_list[str(level)](self)
