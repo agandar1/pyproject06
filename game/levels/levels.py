@@ -196,3 +196,71 @@ def level8(game):
         coin = dots.Coin(coinPoint)
         game.level_coins.append(coin)
         game.coin_list.append(coin)
+        
+def level9(game):
+    "load player and dots for level 9"
+    game.spawn_points = [(int_x[2], int_y[10]), (int_x[10], int_y[4])]
+    speed = 5
+
+    # Square rotation
+    x_rotate = [5, 9, 1, 5, 17]
+    y_rotate = [8, 10, 2, 2, 10]
+    control = 0
+    for i in x_rotate:
+        y_cordinate = y_rotate[control]
+        dot = dots.PathDot(
+            [(mid_x[i], mid_y[y_cordinate]), (mid_x[i + 1], mid_y[y_cordinate]), (mid_x[i + 1], mid_y[y_cordinate - 1]),
+             (mid_x[i], mid_y[y_cordinate - 1])],
+            speed)
+        game.blue_list.append(dot)
+        control += 1
+
+    # Square rotating different timing
+    x_rotate = [1, 13, 13]
+    y_rotate = [8, 10, 4]
+    control = 0
+
+    for i in x_rotate:
+        y_cordinate = y_rotate[control]
+        dot = dots.PathDot(
+            [(mid_x[i + 1], mid_y[y_cordinate - 1]), (mid_x[i], mid_y[y_cordinate - 1]), (mid_x[i], mid_y[y_cordinate]),
+             (mid_x[i + 1], mid_y[y_cordinate])],
+            speed)
+        game.blue_list.append(dot)
+        control += 1
+
+    # Non moving dots int_y
+    x_static = [2, 13, 5, 5, 9, 1, 13, 14, 17]
+    y_static = [6, 2, 4, 10, 8, 4, 6, 8, 8]
+    control = 0
+
+    for i in x_static:
+        y_cordinate = y_static[control]
+        dot = dots.PathDot([(mid_x[i], int_y[y_cordinate]), (mid_x[i], int_y[y_cordinate])], speed)
+        game.blue_list.append(dot)
+        control += 1
+
+    # Non moving dots int_x
+
+    x_static = [4, 7, 8, 4, 16]
+    y_static = [8, 4, 9, 2, 9]
+    control = 0
+
+    for i in x_static:
+        y_cordinate = y_static[control]
+        dot = dots.PathDot([(int_x[i], mid_y[y_cordinate]), (int_x[i], mid_y[y_cordinate])], speed)
+        game.blue_list.append(dot)
+        control += 1
+
+    # L movement
+    dot = dots.PathDot(
+        [(mid_x[10], int_y[8]), (mid_x[10], mid_y[5]), (mid_x[9], mid_y[5]), (mid_x[10], mid_y[5])], speed)
+    game.blue_list.append(dot)
+
+    dot = dots.PathDot(
+        [(mid_x[14], mid_y[2]), (int_x[17], mid_y[2]), (int_x[17], mid_y[1]), (int_x[17], mid_y[2])], speed)
+    game.blue_list.append(dot)
+
+    coin = dots.Coin((int_x[18], int_y[2]))
+    game.level_coins.append(coin)
+    game.coin_list.append(coin)        
