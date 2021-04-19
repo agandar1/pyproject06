@@ -8,28 +8,21 @@ from bot import Player
 WIDTH = 1000
 HEIGHT = 600
 
+
 class TitleScreen(arcade.View):
-    
     def __init__(self):
         super().__init__()
         self.texture = arcade.load_texture("assets/start.png")
 
-    #only needed if changing the background color
-    #def on_show(self):
-    #    arcade.set_background_color(arcade.csscolor.DARK_SLATE_BLUE)
-    #    arcade.set_viewport(0, WIDTH - 1, 0, HEIGHT - 1)
-    
     def on_draw(self):
-        """ Draw this view """
+        "Draw this view"
         arcade.start_render()
-        #only needed if making the text 
-        #arcade.draw_text("Instructions Screen", WIDTH / 2, HEIGHT / 2, arcade.color.WHITE, font_size=50, anchor_x="center")
-        #arcade.draw_text("Click to advance", WIDTH / 2, HEIGHT / 2-75, arcade.color.WHITE, font_size=20, anchor_x="center")
-        self.texture.draw_sized(WIDTH/2, HEIGHT/2, WIDTH, HEIGHT)
+        self.texture.draw_sized(WIDTH / 2, HEIGHT / 2, WIDTH, HEIGHT)
 
     def on_mouse_press(self, _x, _y, _button, _modifiers):
-        """ If the user presses the mouse button, start the game. """
-        game_view = MyGameWindow(WIDTH, HEIGHT, "World's Hardest Game")
+        "If the user presses the mouse button, start the game."
+        mode = 0  # 0 is ai train, 1 is human
+        game_view = GameView(mode)
         game_view.setup()
         self.window.show_view(game_view)
 
