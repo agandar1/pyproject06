@@ -7,8 +7,33 @@ from levels import levels
 WIDTH = 1000
 HEIGHT = 600
 
+class TitleScreen(arcade.View):
+    
+    def __init__(self):
+        super().__init__()
+        self.texture = arcade.load_texture("assets/start.png")
 
-class MyGameWindow(arcade.Window):
+    #only needed if changing the background color
+    #def on_show(self):
+    #    arcade.set_background_color(arcade.csscolor.DARK_SLATE_BLUE)
+    #    arcade.set_viewport(0, WIDTH - 1, 0, HEIGHT - 1)
+    
+    def on_draw(self):
+        """ Draw this view """
+        arcade.start_render()
+        #only needed if making the text 
+        #arcade.draw_text("Instructions Screen", WIDTH / 2, HEIGHT / 2, arcade.color.WHITE, font_size=50, anchor_x="center")
+        #arcade.draw_text("Click to advance", WIDTH / 2, HEIGHT / 2-75, arcade.color.WHITE, font_size=20, anchor_x="center")
+        self.texture.draw_sized(WIDTH/2, HEIGHT/2, WIDTH, HEIGHT)
+
+    def on_mouse_press(self, _x, _y, _button, _modifiers):
+        """ If the user presses the mouse button, start the game. """
+        game_view = MyGameWindow(WIDTH, HEIGHT, "World's Hardest Game")
+        game_view.setup()
+        self.window.show_view(game_view)
+
+
+class MyGameWindow(arcade.View):
     "control game window"
     # sprite lists
     empty_list = None
@@ -40,8 +65,8 @@ class MyGameWindow(arcade.Window):
     physics_engine = None
 
     def __init__(self, width, height, title):
-        super().__init__(width, height, title)
-        self.set_location(400, 200)
+        super().__init__()
+        #self.set_location(400, 200)
         self.setup()
 
     def setup(self):
@@ -198,5 +223,8 @@ class MyGameWindow(arcade.Window):
             self.player_sprite.change_y = 0
 
 
-WIN = MyGameWindow(WIDTH, HEIGHT, "World's Hardest Game")
+#WIN = MyGameWindow(WIDTH, HEIGHT, "World's Hardest Game")
+WIN = arcade.Window(WIDTH, HEIGHT, "World's Hardest Game")
+start_view = TitleScreen()
+WIN.show_view(start_view)
 arcade.run()
