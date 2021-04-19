@@ -3,28 +3,18 @@
 import math
 import arcade
 from levels import levels
+from bot import Player
 
 WIDTH = 1000
 HEIGHT = 600
 
 
-class MyGameWindow(arcade.Window):
+class GameView(arcade.View):
     "control game window"
-    # sprite lists
-    empty_list = None
-    goal_list = None
-    wall_list = None
-    checkpoint_list = None
-    player_list = None
-    blue_list = None
-    coin_list = None
-    level_coins = None
-
     # setup player
     spawn_points = []
     p_speed = 175
     deaths = 0
-    player_sprite = None
 
     # movement
     right = False
@@ -37,11 +27,16 @@ class MyGameWindow(arcade.Window):
     level = 1
     max_level = 9
 
-    physics_engine = None
+    def __init__(self, human):
+        super().__init__()
+        if human:
+            self.player_count = 1
+            self.move_count = 0
+        else:
+            self.player_count = 50
+            self.move_count = 1000
 
-    def __init__(self, width, height, title):
-        super().__init__(width, height, title)
-        self.set_location(400, 200)
+        self.human = human
         self.setup()
 
     def setup(self):
@@ -73,10 +68,8 @@ class MyGameWindow(arcade.Window):
         level_list[str(level)](self)
 
         # load the player
-        self.player_sprite = arcade.Sprite("assets/PLAYER.png", 1.15)
-        self.player_sprite.center_x = self.spawn_points[0][0]
-        self.player_sprite.center_y = self.spawn_points[0][1]
-        self.player_list.append(self.player_sprite)
+        for i in range(self.player_count):
+            self.player_list.append(Player(self.spawn_points[0], self.move_count, self.human, self.p_speed))
 
         # load up the map
         self.empty_list = arcade.tilemap.process_layer(my_map, 'empty', 1)
@@ -84,17 +77,27 @@ class MyGameWindow(arcade.Window):
         self.goal_list = arcade.tilemap.process_layer(my_map, 'goal', 1, use_spatial_hash=True)
         self.checkpoint_list = arcade.tilemap.process_layer(my_map, 'checkpoint', 1)
 
-        self.physics_engine = arcade.PhysicsEnginePlatformer(self.player_sprite, self.wall_list, 0)
+        self.engine_list = []
+        for sprite in self.player_list:
+            physics_engine = arcade.PhysicsEnginePlatformer(sprite, self.wall_list, 0)
+            self.engine_list.append(physics_engine)
 
     def on_update(self, delta_time):
-        self.move(delta_time)
-        self.blue_hit()
-        self.collect_coins()
-        self.check_spawn()
-        self.check_win()
+        for i, player in enumerate(self.player_list):
+            self.player_sprite = player
+            if self.human:
+                self.move(delta_time)
+            else:
+                player.update(delta_time)
+            self.blue_list.update()
+            self.blue_hit()
+            self.collect_coins()
+            self.check_spawn()
+            self.check_win()
 
         # update the physics engine
-        self.physics_engine.update()
+        for engine in self.engine_list:
+            engine.update()
 
     def move(self, delta_time):
         "move the player"
@@ -109,7 +112,6 @@ class MyGameWindow(arcade.Window):
 
     def blue_hit(self):
         "update blue dots and check for collisions"
-        self.blue_list.update()
         hit_list = arcade.check_for_collision_with_list(self.player_sprite, self.blue_list)
         # return the coins if the player was hit
         if len(hit_list) > 0:
@@ -174,29 +176,33 @@ class MyGameWindow(arcade.Window):
         self.player_list.draw()
 
     def on_key_press(self, symbol, modifiers):
-        if symbol in (arcade.key.D, arcade.key.RIGHT):
-            self.right = True
-        if symbol in (arcade.key.A, arcade.key.LEFT):
-            self.left = True
-        if symbol in (arcade.key.W, arcade.key.UP):
-            self.up = True
-        if symbol in (arcade.key.S, arcade.key.DOWN):
-            self.down = True
+        if self.human or not self.human:
+            if symbol in (arcade.key.D, arcade.key.RIGHT):
+                self.right = True
+            if symbol in (arcade.key.A, arcade.key.LEFT):
+                self.left = True
+            if symbol in (arcade.key.W, arcade.key.UP):
+                self.up = True
+            if symbol in (arcade.key.S, arcade.key.DOWN):
+                self.down = True
 
     def on_key_release(self, symbol, modifiers):
-        if symbol in (arcade.key.D, arcade.key.RIGHT):
-            self.right = False
-            self.player_sprite.change_x = 0
-        if symbol in (arcade.key.A, arcade.key.LEFT):
-            self.left = False
-            self.player_sprite.change_x = 0
-        if symbol in (arcade.key.W, arcade.key.UP):
-            self.up = False
-            self.player_sprite.change_y = 0
-        if symbol in (arcade.key.S, arcade.key.DOWN):
-            self.down = False
-            self.player_sprite.change_y = 0
+        if self.human or not self.human:
+            if symbol in (arcade.key.D, arcade.key.RIGHT):
+                self.right = False
+                self.player_sprite.change_x = 0
+            if symbol in (arcade.key.A, arcade.key.LEFT):
+                self.left = False
+                self.player_sprite.change_x = 0
+            if symbol in (arcade.key.W, arcade.key.UP):
+                self.up = False
+                self.player_sprite.change_y = 0
+            if symbol in (arcade.key.S, arcade.key.DOWN):
+                self.down = False
+                self.player_sprite.change_y = 0
 
 
-WIN = MyGameWindow(WIDTH, HEIGHT, "World's Hardest Game")
+WIN = arcade.Window(WIDTH, HEIGHT, "World's Hardest Game")
+start_view = GameView(0)
+WIN.show_view(start_view)
 arcade.run()
