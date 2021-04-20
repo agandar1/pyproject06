@@ -87,10 +87,11 @@ class ModeSelection(arcade.View):
 
 class LevelButton(arcade.gui.UIGhostFlatButton):
 
-    def __init__(self, innerText, center_x, center_y, mode, ui_manager):
+    def __init__(self, innerText, center_x, center_y, mode, ui_manager, level):
         self.innerText = innerText
         self.mode = mode
         self.ui_manager = ui_manager
+        self.level = level
         super().__init__(
             innerText,
             center_x=center_x,
@@ -101,9 +102,8 @@ class LevelButton(arcade.gui.UIGhostFlatButton):
     def on_click(self):
         """ Called when user lets off button """ 
         self.ui_manager.purge_ui_elements()
-        level = self.innerText.replace("Level ","")
         gameView = GameView(self.mode)
-        gameView.level = level
+        gameView.level = self.level
         gameView.setup()
         WIN.show_view(gameView)
 
@@ -138,10 +138,10 @@ class levelSelection(arcade.View):
 
         for i in range(3):
             for j in range(3):
-                button = LevelButton("Level "+str(count), x_coords[j], y_coords[i], self.mode, self.ui_manager)
+                button = LevelButton("Level "+str(count), x_coords[j], y_coords[i], self.mode, self.ui_manager, count)
                 self.ui_manager.add_ui_element(button)       
                 count += 1
-        button = LevelButton("Level 10", 475, 75, self.mode, self.ui_manager)
+        button = LevelButton("Level 10", 475, 75, self.mode, self.ui_manager, 10)
         self.ui_manager.add_ui_element(button)
        
 
