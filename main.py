@@ -12,7 +12,6 @@ HEIGHT = 600
 
 class TitleScreen(arcade.View):
     def __init__(self):
-        self.WIN = WIN
         super().__init__()
         self.texture = arcade.load_texture("assets/start.png")
 
