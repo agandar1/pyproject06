@@ -75,6 +75,7 @@ class LevelSelection(arcade.View):
     def on_draw(self):
         "Draw this view"
         arcade.start_render()
+
         arcade.draw_text("Use the Arrow Keys to Select a Level", WIDTH / 2, HEIGHT / 1.25 , arcade.color.WHITE, font_size=30, anchor_x="center")
         arcade.draw_text(" < "+str(self.level)+" > ", WIDTH / 2, HEIGHT / 2, arcade.color.WHITE, font_size=50, anchor_x="center")
         arcade.draw_text("Click Anywhere Continue", WIDTH / 2, HEIGHT / 5, arcade.color.WHITE, font_size=30, anchor_x="center")
