@@ -5,7 +5,6 @@ import math
 import arcade
 from levels import levels
 from bot import Player, Genetic
-from arcade.gui import UIManager
 
 WIDTH = 1000
 HEIGHT = 600
