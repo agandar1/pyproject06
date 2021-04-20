@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 
+import copy
 import math
 import arcade
 from levels import levels
@@ -47,15 +48,13 @@ class GameView(arcade.View):
 
     def __init__(self, human):
         super().__init__()
-        if human:
+        self.human = human
+        if self.human:
             self.player_count = 1
             self.move_count = 0
         else:
             self.player_count = 50
             self.move_count = 500
-
-        self.human = human
-        self.setup()
 
     def setup(self):
         "set up the game"
@@ -69,7 +68,7 @@ class GameView(arcade.View):
         self.level_coins = []
         self.load_level(self.level)
 
-    def load_level(self, level, create_players=True):
+    def load_level(self, level):
         "load a specific level"
         level_list = {
             "1": levels.level1,
@@ -86,10 +85,9 @@ class GameView(arcade.View):
         level_list[str(level)](self)
 
         # load the player
-        if create_players:
-            for i in range(self.player_count):
-                player = Player(self.spawn_points[0], self.move_count, self.human, self.p_speed, self.level_coins[:], levels.goals[level - 1])
-                self.player_list.append(player)
+        for i in range(self.player_count):
+            player = Player(self.spawn_points[0], self.move_count, self.human, self.p_speed, self.level_coins[:], levels.goals[level - 1])
+            self.player_list.append(player)
 
         # load up the map
         self.empty_list = arcade.tilemap.process_layer(my_map, 'empty', 1)
@@ -104,7 +102,6 @@ class GameView(arcade.View):
 
     def on_update(self, delta_time):
         self.checkLife()
-
         if not self.allDead or self.human:
             for i, player in enumerate(self.player_list):
                 self.player_sprite = player
@@ -118,20 +115,29 @@ class GameView(arcade.View):
                 self.check_spawn()
                 self.check_win()
         else:
-            self.load_level(self.level, False)
-            alg = Genetic(self.player_list)
-            self.player_list = alg.newPlayers()
-
+            self.newplayers()
         # update the physics engine
         for engine in self.engine_list:
             engine.update()
 
+    def newplayers(self):
+        gen = Genetic(copy.deepcopy(self.player_list))
+        new_players = gen.newPlayers()
+        print("setingup")
+        self.setup()
+
+        for i in range(len(self.player_list)):
+            self.player_list[i].brain.directions = new_players[i].directions
+            self.player_list[i].directions = self.player_list[i].brain.directions
+
     def checkLife(self):
         alive = False
-        for player in self.player_list:
-            if player.alive == True:
+        for i in range(len(self.player_list)):
+            if self.player_list[i].alive:
                 alive = True
-        if not alive:
+        if alive:
+            self.allDead = False
+        else:
             self.allDead = True
 
     def move(self, delta_time):

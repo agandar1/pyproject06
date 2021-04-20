@@ -5,9 +5,8 @@ import arcade
 
 
 class playerBrain():
-    directions = []
-
     def __init__(self, move_count):
+        self.directions = []
         self.move_count = move_count
         self.randomMoves()
 
@@ -17,35 +16,42 @@ class playerBrain():
 
 
 class Genetic():
-    players = []
-
     def __init__(self, player_list):
         self.players = player_list
 
     def newPlayers(self):
-        old_players = self.players
-        new_players = old_players[:]
+        self.selection()
 
-        return new_players
+        for i in range(len(self.players)):
+            self.players[i].brain.directions = self.players[i].directions
+        return self.players
+
+    def selection(self):
+        fitness_sum = 0
+        for player in self.players:
+            fitness_sum += player.fitness
 
 
 class Player(arcade.Sprite):
     "class for the player/s"
-    reachedCoin = False
-    alive = True
-    fitness = 0
-
     def __init__(self, spawn, move_count, human, speed, coinList, goal):
         super().__init__("assets/PLAYER.png", 1.15)
+        self.reachedCoin = False
+        self.alive = True
+        self.fitness = 0
+
         if not human:
             self.brain = playerBrain(move_count)
-            self.directions = self.brain.directions
+            self.directions = self.brain.directions[:]
+
         self.center_x = spawn[0]
         self.center_y = spawn[1]
-        self.speed = speed
-        self.coinList = coinList
+
         self.goal_x = goal[0]
         self.goal_y = goal[1]
+
+        self.speed = speed
+        self.coinList = coinList
         if len(coinList) == 0:
             self.reachedCoin = True
         else:
@@ -77,7 +83,6 @@ class Player(arcade.Sprite):
         else:
             if self.fitness == 0:
                 self.calcFitness()
-                print(self.fitness)
             self.change_x = 0
             self.change_y = 0
 
