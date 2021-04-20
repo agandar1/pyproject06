@@ -28,8 +28,7 @@ class TitleScreen(arcade.View):
 
 
 class ModeButton(arcade.gui.UIGhostFlatButton):
-
-    def __init__(self, innerText, center_x, center_y,ui_manager):
+    def __init__(self, innerText, center_x, center_y, ui_manager):
         self.innerText = innerText
         self.ui_manager = ui_manager
         super().__init__(
@@ -40,7 +39,7 @@ class ModeButton(arcade.gui.UIGhostFlatButton):
         )
 
     def on_click(self):
-        """ Called when user lets off button """
+        "Called when user lets off button"
         self.ui_manager.purge_ui_elements()
         mode = 1
         if self.innerText == "Train AI":
@@ -52,41 +51,36 @@ class ModeButton(arcade.gui.UIGhostFlatButton):
         levelView = levelSelection(mode)
         WIN.show_view(levelView)
 
+
 class ModeSelection(arcade.View):
-    
     def __init__(self):
-        
-        """ This is run once when we switch to this view """
+        "This is run once when we switch to this view"
         super().__init__()
-        self.ui_manager = UIManager() 
-        """ This is run once when we switch to this view """
-    
+        self.ui_manager = UIManager()
+        "This is run once when we switch to this view"
+
     def on_draw(self):
-        
         arcade.start_render()
-        arcade.draw_text("Select a Mode", WIDTH / 2, HEIGHT / 1.25 , arcade.color.WHITE, font_size=50, anchor_x="center")
- 
+        arcade.draw_text("Select a Mode", WIDTH / 2, HEIGHT / 1.25, arcade.color.WHITE, font_size=50, anchor_x="center")
+
     def on_show_view(self):
-        
         self.setup()
         arcade.set_background_color(arcade.csscolor.DARK_SLATE_BLUE)
         arcade.set_viewport(0, WIDTH - 1, 0, HEIGHT - 1)
 
     def setup(self):
-        """ Draw this view """    
-
-        button = ModeButton("Free Play", 475, 415,self.ui_manager)
+        "Draw this view"
+        button = ModeButton("Free Play", 475, 415, self.ui_manager)
         self.ui_manager.add_ui_element(button)
 
-        button = ModeButton("Train AI", 475, 300,self.ui_manager)
+        button = ModeButton("Train AI", 475, 300, self.ui_manager)
         self.ui_manager.add_ui_element(button)
 
         button = ModeButton("Watch AI", 475, 175, self.ui_manager)
         self.ui_manager.add_ui_element(button)
-       
+
 
 class LevelButton(arcade.gui.UIGhostFlatButton):
-
     def __init__(self, innerText, center_x, center_y, mode, ui_manager, level):
         self.innerText = innerText
         self.mode = mode
@@ -100,7 +94,7 @@ class LevelButton(arcade.gui.UIGhostFlatButton):
         )
 
     def on_click(self):
-        """ Called when user lets off button """ 
+        "Called when user lets off button"
         self.ui_manager.purge_ui_elements()
         gameView = GameView(self.mode)
         gameView.level = self.level
@@ -109,41 +103,39 @@ class LevelButton(arcade.gui.UIGhostFlatButton):
 
 
 class levelSelection(arcade.View):
-
     def __init__(self, mode):
         self.mode = mode
-        """ This is run once when we switch to this view """
+        "This is run once when we switch to this view"
         super().__init__()
         self.ui_manager = UIManager()
-        
-        """ This is run once when we switch to this view """
+
+        "This is run once when we switch to this view"
         arcade.set_background_color(arcade.csscolor.DARK_SLATE_BLUE)
         arcade.set_viewport(0, WIDTH - 1, 0, HEIGHT - 1)
 
     def on_draw(self):
         arcade.start_render()
-        arcade.draw_text("Select a Level", WIDTH / 2, HEIGHT / 1.25 , arcade.color.WHITE, font_size=50, anchor_x="center")
- 
+        arcade.draw_text("Select a Level", WIDTH / 2, HEIGHT / 1.25, arcade.color.WHITE, font_size=50, anchor_x="center")
+
     def on_show_view(self):
-        
         self.setup()
         arcade.set_background_color(arcade.csscolor.DARK_SLATE_BLUE)
         arcade.set_viewport(0, WIDTH - 1, 0, HEIGHT - 1)
 
     def setup(self):
-        """ Draw this view """ 
+        "Draw this view"
         x_coords = [130, 475, 835]
         y_coords = [415, 300, 175]
         count = 1
 
         for i in range(3):
             for j in range(3):
-                button = LevelButton("Level "+str(count), x_coords[j], y_coords[i], self.mode, self.ui_manager, count)
-                self.ui_manager.add_ui_element(button)       
+                button = LevelButton("Level " + str(count), x_coords[j], y_coords[i], self.mode, self.ui_manager, count)
+                self.ui_manager.add_ui_element(button)
                 count += 1
         button = LevelButton("Level 10", 475, 75, self.mode, self.ui_manager, 10)
         self.ui_manager.add_ui_element(button)
-       
+
 
 class GameView(arcade.View):
     "control game window"

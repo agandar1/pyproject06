@@ -17,15 +17,16 @@ class playerBrain():
 
 
 class Genetic():
-    parents_count = 20
+    parents_count = 10
 
     def __init__(self, player_list):
         self.parents = []
+        self.babies = []
         self.directions = []
         self.players = player_list
 
-        #for i in range(int(self.parents_count / 2)):
-            #self.killWorst()
+        # for i in range(int(self.parents_count / 2)):
+        #     self.killWorst()
 
         for i in range(len(self.players)):
             self.directions.append(self.players[i].directions)
@@ -45,7 +46,7 @@ class Genetic():
     def newDirections(self):
         for i in range(self.parents_count):
             self.selection()
-        # print(len(self.parents))
+        self.crossover()
 
         return self.directions
 
@@ -62,6 +63,20 @@ class Genetic():
             fitness_sum += self.players[i].fitness
             if fitness_sum > rand_num:
                 self.parents.append(copy.deepcopy(self.players[i].directions))
+                break
+
+    def crossover(self):
+        while len(self.parents) > 0:
+            baby1 = self.parents.pop()
+            baby2 = self.parents.pop()
+
+            cross_point = randint(1, 499)
+            for i in range(cross_point):
+                baby1[i] = baby1[i] + baby2[i]
+                baby2[i] = baby1[i] - baby2[i]
+                baby1[i] = baby1[i] - baby2[i]
+            self.babies.append(baby1)
+            self.babies.append(baby2)
 
 
 class Player(arcade.Sprite):
