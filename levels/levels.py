@@ -9,7 +9,7 @@ angles1 = [0, dots.d90, dots.d180, dots.d270]
 angles2 = [0, dots.d120, dots.d240]
 
 goals = [
-    (mid_x[16], mid_y[3]),
+    (mid_x[16], mid_y[5]),
     (mid_x[16], int_y[6]),
     (mid_x[10], int_y[6]),
 ]
@@ -212,7 +212,8 @@ def level8(game):
         coin = dots.Coin(coinPoint)
         game.level_coins.append(coin)
         game.coin_list.append(coin)
-        
+
+
 def level9(game):
     "load player and dots for level 9"
     game.spawn_points = [(int_x[2], int_y[10]), (int_x[10], int_y[4])]

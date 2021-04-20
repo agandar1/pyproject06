@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-
 import copy
 import math
 import arcade
@@ -42,13 +41,12 @@ class ModeSelection(arcade.View):
             string = "Watch AI"
 
         arcade.start_render()
-        arcade.draw_text("Use the Arrow Keys to Select a Mode", WIDTH / 2, HEIGHT / 1.25 , arcade.color.WHITE, font_size=30, anchor_x="center")
-        arcade.draw_text(" < "+string+" > ", WIDTH / 2, HEIGHT / 2, arcade.color.WHITE, font_size=50, anchor_x="center")
+        arcade.draw_text("Use the Arrow Keys to Select a Mode", WIDTH / 2, HEIGHT / 1.25, arcade.color.WHITE, font_size=30, anchor_x="center")
+        arcade.draw_text(" < " + string + " > ", WIDTH / 2, HEIGHT / 2, arcade.color.WHITE, font_size=50, anchor_x="center")
         arcade.draw_text("Click Anywhere Continue", WIDTH / 2, HEIGHT / 5, arcade.color.WHITE, font_size=30, anchor_x="center")
 
         arcade.set_background_color(arcade.csscolor.DARK_SLATE_BLUE)
         arcade.set_viewport(0, WIDTH - 1, 0, HEIGHT - 1)
-
 
     def on_mouse_press(self, _x, _y, _button, _modifiers):
         "If the user presses the mouse button, start the game."
@@ -56,16 +54,18 @@ class ModeSelection(arcade.View):
         self.window.show_view(levelSelect)
 
     def on_key_press(self, symbol, modifiers):
-            if symbol in (arcade.key.D, arcade.key.RIGHT):
-                if self.mode == 2:
-                    self.mode = 0
-                else:
-                    self.mode += 1
-            if symbol in (arcade.key.A, arcade.key.LEFT):
-                if self.mode == 0:
-                    self.mode = 2
-                else:
-                    self.mode -= 1
+        if symbol in (arcade.key.D, arcade.key.RIGHT):
+            if self.mode == 2:
+                self.mode = 0
+            else:
+                self.mode += 1
+        if symbol in (arcade.key.A, arcade.key.LEFT):
+            if self.mode == 0:
+                self.mode = 2
+            else:
+                self.mode -= 1
+
+
 class LevelSelection(arcade.View):
     def __init__(self, mode):
         self.mode = mode
@@ -76,13 +76,12 @@ class LevelSelection(arcade.View):
         "Draw this view"
         arcade.start_render()
 
-        arcade.draw_text("Use the Arrow Keys to Select a Level", WIDTH / 2, HEIGHT / 1.25 , arcade.color.WHITE, font_size=30, anchor_x="center")
-        arcade.draw_text(" < "+str(self.level)+" > ", WIDTH / 2, HEIGHT / 2, arcade.color.WHITE, font_size=50, anchor_x="center")
+        arcade.draw_text("Use the Arrow Keys to Select a Level", WIDTH / 2, HEIGHT / 1.25, arcade.color.WHITE, font_size=30, anchor_x="center")
+        arcade.draw_text(" < " + str(self.level) + " > ", WIDTH / 2, HEIGHT / 2, arcade.color.WHITE, font_size=50, anchor_x="center")
         arcade.draw_text("Click Anywhere Continue", WIDTH / 2, HEIGHT / 5, arcade.color.WHITE, font_size=30, anchor_x="center")
 
         arcade.set_background_color(arcade.csscolor.DARK_SLATE_BLUE)
         arcade.set_viewport(0, WIDTH - 1, 0, HEIGHT - 1)
-
 
     def on_mouse_press(self, _x, _y, _button, _modifiers):
         "If the user presses the mouse button, start the game."
@@ -92,17 +91,17 @@ class LevelSelection(arcade.View):
         self.window.show_view(gameView)
 
     def on_key_press(self, symbol, modifiers):
-            if symbol in (arcade.key.D, arcade.key.RIGHT):
-                if self.level == 10:
-                    self.level = 1
-                else:
-                    self.level += 1
-            if symbol in (arcade.key.A, arcade.key.LEFT):
-                if self.level == 1:
-                    self.level = 10
-                else:
-                    self.level -= 1
-      
+        if symbol in (arcade.key.D, arcade.key.RIGHT):
+            if self.level == 10:
+                self.level = 1
+            else:
+                self.level += 1
+        if symbol in (arcade.key.A, arcade.key.LEFT):
+            if self.level == 1:
+                self.level = 10
+            else:
+                self.level -= 1
+
 
 class GameView(arcade.View):
     "control game window"
@@ -121,6 +120,7 @@ class GameView(arcade.View):
     allDead = False
     level = 1
     max_level = 10
+    generation = 1
 
     def __init__(self, mode):
         super().__init__()
@@ -132,7 +132,7 @@ class GameView(arcade.View):
         else:
             self.human = False
             self.player_count = 50
-            self.move_count = 500
+            self.move_count = 50
 
         self.watching = False
         if self.mode == 2:
@@ -204,8 +204,11 @@ class GameView(arcade.View):
             engine.update()
 
     def newplayers(self):
-        gen = Genetic(copy.deepcopy(self.player_list))
+        self.generation += 1
+        gen = Genetic(copy.deepcopy(self.player_list), self.move_count)
         new_directions = gen.newDirections()
+        if self.generation % 5 == 0:
+            self.move_count += 20
         self.setup()
 
         for i in range(len(self.player_list)):

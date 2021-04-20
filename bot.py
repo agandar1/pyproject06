@@ -19,11 +19,16 @@ class playerBrain():
 class Genetic():
     parents_count = 10
 
-    def __init__(self, player_list):
+    def __init__(self, player_list, move_count):
         self.parents = []
         self.babies = []
         self.directions = []
         self.players = player_list
+        self.moves = move_count
+
+        for i in range(len(self.players)):
+            while len(self.players[i].directions) < self.moves:
+                self.players[i].directions.insert(0, randint(1, 9))
 
         for i in range(int(self.parents_count + 1)):
             self.killWorst()
@@ -47,7 +52,7 @@ class Genetic():
     def killWorst(self):
         least = 100
         for i in range(len(self.players)):
-            if self.players[i].fitness < least:
+            if (self.players[i].fitness).real < least:
                 least = self.players[i].fitness
         for i in range(len(self.players)):
             if self.players[i].fitness == least:
@@ -85,7 +90,7 @@ class Genetic():
             baby1 = self.parents.pop()
             baby2 = self.parents.pop()
 
-            cross_point = randint(1, 499)
+            cross_point = randint(1, self.moves - 1)
             for i in range(cross_point):
                 baby1[i] = baby1[i] + baby2[i]
                 baby2[i] = baby1[i] - baby2[i]
