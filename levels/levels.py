@@ -8,6 +8,11 @@ int_y = [0, 50, 100, 150, 200, 250, 300, 350, 400, 450, 500, 550]
 angles1 = [0, dots.d90, dots.d180, dots.d270]
 angles2 = [0, dots.d120, dots.d240]
 
+goals = [
+    (mid_x[16], mid_y[3]),
+    (mid_x[16], mid_y[3]),
+]
+
 
 def level1(game):
     "load player and dots for level 1"
@@ -17,6 +22,7 @@ def level1(game):
         speed = 6
     else:
         speed = 0.21
+
 
     # start the dots for level 1
     # dot = dottype(list of points, speed)

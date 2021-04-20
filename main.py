@@ -21,7 +21,7 @@ class TitleScreen(arcade.View):
 
     def on_mouse_press(self, _x, _y, _button, _modifiers):
         "If the user presses the mouse button, start the game."
-        mode = 0  # 0 is ai train, 1 is human
+        mode = 1  # 0 is ai train, 1 is human
         game_view = GameView(mode)
         game_view.setup()
         self.window.show_view(game_view)
@@ -42,7 +42,7 @@ class GameView(arcade.View):
 
     # game variables
     game_over = False
-    level = 1
+    level = 2
     max_level = 9
 
     def __init__(self, human):
@@ -87,7 +87,8 @@ class GameView(arcade.View):
 
         # load the player
         for i in range(self.player_count):
-            self.player_list.append(Player(self.spawn_points[0], self.move_count, self.human, self.p_speed))
+            player = Player(self.spawn_points[0], self.move_count, self.human, self.p_speed, self.coin_list, levels.goals[level - 1])
+            self.player_list.append(player)
 
         # load up the map
         self.empty_list = arcade.tilemap.process_layer(my_map, 'empty', 1)
@@ -138,8 +139,11 @@ class GameView(arcade.View):
                 self.coin_list.append(coin)
         # respawn the player
         for dot in hit_list:
-            self.player_sprite.center_x = self.spawn_points[0][0]
-            self.player_sprite.center_y = self.spawn_points[0][1]
+            if self.human:
+                self.player_sprite.center_x = self.spawn_points[0][0]
+                self.player_sprite.center_y = self.spawn_points[0][1]
+            else:
+                self.player_sprite.alive = False
 
     def collect_coins(self):
         "check if the player collected any coins"
@@ -147,6 +151,7 @@ class GameView(arcade.View):
         hit_list = arcade.check_for_collision_with_list(self.player_sprite, self.coin_list)
         # remove collected coins
         for coin in hit_list:
+            self.player_sprite.reachedCoin = True
             coin.remove_from_sprite_lists()
 
     def check_win(self):
