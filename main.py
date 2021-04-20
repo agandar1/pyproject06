@@ -46,15 +46,21 @@ class GameView(arcade.View):
     level = 1
     max_level = 9
 
-    def __init__(self, human):
+    def __init__(self, mode):
         super().__init__()
-        self.human = human
-        if self.human:
+        self.mode = mode
+        if self.mode == 1:
+            self.human = True
             self.player_count = 1
             self.move_count = 0
         else:
+            self.human = False
             self.player_count = 50
             self.move_count = 500
+
+        self.watching = False
+        if self.mode == 2:
+            self.watching = True
 
     def setup(self):
         "set up the game"
@@ -122,13 +128,12 @@ class GameView(arcade.View):
 
     def newplayers(self):
         gen = Genetic(copy.deepcopy(self.player_list))
-        new_players = gen.newPlayers()
-        print("setingup")
+        new_directions = gen.newDirections()
         self.setup()
 
         for i in range(len(self.player_list)):
-            self.player_list[i].brain.directions = new_players[i].directions
-            self.player_list[i].directions = self.player_list[i].brain.directions
+            self.player_list[i].brain.directions = copy.deepcopy(new_directions[i])
+            self.player_list[i].directions = copy.deepcopy(new_directions[i])
 
     def checkLife(self):
         alive = False

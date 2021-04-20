@@ -1,7 +1,8 @@
 #!/usr/bin/env python3
 # Main AI File
-from random import randint
+from random import randint, uniform
 import arcade
+import copy
 
 
 class playerBrain():
@@ -16,20 +17,51 @@ class playerBrain():
 
 
 class Genetic():
+    parents_count = 20
+
     def __init__(self, player_list):
+        self.parents = []
+        self.directions = []
         self.players = player_list
 
-    def newPlayers(self):
-        self.selection()
+        #for i in range(int(self.parents_count / 2)):
+            #self.killWorst()
 
         for i in range(len(self.players)):
-            self.players[i].brain.directions = self.players[i].directions
-        return self.players
+            self.directions.append(self.players[i].directions)
+
+        self.total_fitness = self.totalFitness()
+
+    def killWorst(self):
+        least = 100
+        for i in range(len(self.players)):
+            if self.players[i].fitness < least:
+                least = self.players[i].fitness
+        for i in range(len(self.players)):
+            if self.players[i].fitness == least:
+                self.players[i].kill()
+                break
+
+    def newDirections(self):
+        for i in range(self.parents_count):
+            self.selection()
+        # print(len(self.parents))
+
+        return self.directions
+
+    def totalFitness(self):
+        total_fitness = 0
+        for i in range(len(self.players)):
+            total_fitness += self.players[i].fitness
+        return total_fitness
 
     def selection(self):
         fitness_sum = 0
-        for player in self.players:
-            fitness_sum += player.fitness
+        rand_num = uniform(0, self.total_fitness)
+        for i in range(len(self.players)):
+            fitness_sum += self.players[i].fitness
+            if fitness_sum > rand_num:
+                self.parents.append(copy.deepcopy(self.players[i].directions))
 
 
 class Player(arcade.Sprite):
@@ -42,7 +74,7 @@ class Player(arcade.Sprite):
 
         if not human:
             self.brain = playerBrain(move_count)
-            self.directions = self.brain.directions[:]
+            self.directions = copy.deepcopy(self.brain.directions)
 
         self.center_x = spawn[0]
         self.center_y = spawn[1]
@@ -80,7 +112,7 @@ class Player(arcade.Sprite):
                 self.move(delta_time)
             else:
                 self.alive = False
-        else:
+        if not self.alive:
             if self.fitness == 0:
                 self.calcFitness()
             self.change_x = 0
