@@ -19,11 +19,16 @@ class playerBrain():
 class Genetic():
     parents_count = 10
 
-    def __init__(self, player_list):
+    def __init__(self, player_list, move_count):
         self.parents = []
         self.babies = []
         self.directions = []
         self.players = player_list
+        self.moves = move_count
+
+        for i in range(len(self.players)):
+            while len(self.players[i].directions) < self.moves:
+                self.players[i].directions.insert(0, randint(1, 9))
 
         for i in range(int(self.parents_count + 1)):
             self.killWorst()
@@ -47,7 +52,7 @@ class Genetic():
     def killWorst(self):
         least = 100
         for i in range(len(self.players)):
-            if self.players[i].fitness < least:
+            if (self.players[i].fitness).real < least:
                 least = self.players[i].fitness
         for i in range(len(self.players)):
             if self.players[i].fitness == least:
@@ -85,7 +90,7 @@ class Genetic():
             baby1 = self.parents.pop()
             baby2 = self.parents.pop()
 
-            cross_point = randint(1, 499)
+            cross_point = randint(1, self.moves - 1)
             for i in range(cross_point):
                 baby1[i] = baby1[i] + baby2[i]
                 baby2[i] = baby1[i] - baby2[i]
@@ -94,7 +99,7 @@ class Genetic():
             self.babies.append(baby2)
 
     def mutation(self):
-        mutate_rate = 0.01
+        mutate_rate = 0.15
         for i in range(len(self.babies)):
             for j in range(len(self.babies[i])):
                 rand_num = uniform(0, 1)
@@ -109,6 +114,7 @@ class Player(arcade.Sprite):
         self.reachedCoin = False
         self.alive = True
         self.fitness = 0
+        self.timer = 0
 
         if not human:
             self.brain = playerBrain(move_count)
@@ -145,9 +151,12 @@ class Player(arcade.Sprite):
             self.fitness = 1.0 / (self.distance(self.goal_x, self.goal_y)**2)
 
     def update(self, delta_time):
+        self.timer += delta_time
         if self.alive:
             if len(self.brain.directions) > 0:
-                self.move(delta_time)
+                if self.timer > delta_time * 2.7:
+                    self.move(delta_time)
+                    self.timer = 0
             else:
                 self.alive = False
         if not self.alive:
