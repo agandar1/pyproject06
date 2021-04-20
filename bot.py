@@ -99,7 +99,7 @@ class Genetic():
             self.babies.append(baby2)
 
     def mutation(self):
-        mutate_rate = 0.01
+        mutate_rate = 0.15
         for i in range(len(self.babies)):
             for j in range(len(self.babies[i])):
                 rand_num = uniform(0, 1)
@@ -114,6 +114,7 @@ class Player(arcade.Sprite):
         self.reachedCoin = False
         self.alive = True
         self.fitness = 0
+        self.timer = 0
 
         if not human:
             self.brain = playerBrain(move_count)
@@ -150,9 +151,12 @@ class Player(arcade.Sprite):
             self.fitness = 1.0 / (self.distance(self.goal_x, self.goal_y)**2)
 
     def update(self, delta_time):
+        self.timer += delta_time
         if self.alive:
             if len(self.brain.directions) > 0:
-                self.move(delta_time)
+                if self.timer > delta_time * 2.7:
+                    self.move(delta_time)
+                    self.timer = 0
             else:
                 self.alive = False
         if not self.alive:
