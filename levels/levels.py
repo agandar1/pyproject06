@@ -8,6 +8,12 @@ int_y = [0, 50, 100, 150, 200, 250, 300, 350, 400, 450, 500, 550]
 angles1 = [0, dots.d90, dots.d180, dots.d270]
 angles2 = [0, dots.d120, dots.d240]
 
+goals = [
+    (mid_x[16], mid_y[3]),
+    (mid_x[16], int_y[6]),
+    (mid_x[10], int_y[6]),
+]
+
 
 def level1(game):
     "load player and dots for level 1"
@@ -34,7 +40,10 @@ def level1(game):
 def level2(game):
     "load player and dots for level 2"
     game.spawn_points = [(mid_x[2], int_y[6])]
-    speed = 5
+    if game.human:
+        speed = 5
+    else:
+        speed = 0.215
 
     for i in range(4, 16):
         dot = dots.PathDot([(mid_x[i], mid_y[3]), (mid_x[i], mid_y[8])], speed)
@@ -51,6 +60,10 @@ def level3(game):
     "load player and dots for level 3"
     game.spawn_points = [(int_x[10], int_y[6])]
     speed = 3
+    if game.human:
+        speed = 3
+    else:
+        speed = 0.08
 
     dot = dots.PathDot([(mid_x[9], mid_y[7]), (mid_x[11], mid_y[7]), (mid_x[11], mid_y[4]), (mid_x[8], mid_y[4]), (mid_x[8], mid_y[7])], speed)
     game.blue_list.append(dot)

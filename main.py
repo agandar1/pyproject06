@@ -1,9 +1,10 @@
 #!/usr/bin/env python3
 
+import copy
 import math
 import arcade
 from levels import levels
-from bot import Player
+from bot import Player, Genetic
 from arcade.gui import UIManager
 
 WIDTH = 1000
@@ -158,7 +159,7 @@ class GameView(arcade.View):
     down = False
 
     # game variables
-    game_over = False
+    allDead = False
     level = 1
     max_level = 10
 
@@ -209,7 +210,8 @@ class GameView(arcade.View):
 
         # load the player
         for i in range(self.player_count):
-            self.player_list.append(Player(self.spawn_points[0], self.move_count, self.human, self.p_speed))
+            player = Player(self.spawn_points[0], self.move_count, self.human, self.p_speed, self.level_coins[:], levels.goals[level - 1])
+            self.player_list.append(player)
 
         # load up the map
         self.empty_list = arcade.tilemap.process_layer(my_map, 'empty', 1)
@@ -223,21 +225,43 @@ class GameView(arcade.View):
             self.engine_list.append(physics_engine)
 
     def on_update(self, delta_time):
-        for i, player in enumerate(self.player_list):
-            self.player_sprite = player
-            if self.human:
-                self.move(delta_time)
-            else:
-                player.update(delta_time)
-            self.blue_list.update()
-            self.blue_hit()
-            self.collect_coins()
-            self.check_spawn()
-            self.check_win()
-
+        self.checkLife()
+        if not self.allDead or self.human:
+            for i, player in enumerate(self.player_list):
+                self.player_sprite = player
+                if self.human:
+                    self.move(delta_time)
+                else:
+                    player.update(delta_time)
+                self.blue_list.update()
+                self.blue_hit()
+                self.collect_coins()
+                self.check_spawn()
+                self.check_win()
+        else:
+            self.newplayers()
         # update the physics engine
         for engine in self.engine_list:
             engine.update()
+
+    def newplayers(self):
+        gen = Genetic(copy.deepcopy(self.player_list))
+        new_directions = gen.newDirections()
+        self.setup()
+
+        for i in range(len(self.player_list)):
+            self.player_list[i].brain.directions = copy.deepcopy(new_directions[i])
+            self.player_list[i].directions = copy.deepcopy(new_directions[i])
+
+    def checkLife(self):
+        alive = False
+        for i in range(len(self.player_list)):
+            if self.player_list[i].alive:
+                alive = True
+        if alive:
+            self.allDead = False
+        else:
+            self.allDead = True
 
     def move(self, delta_time):
         "move the player"
@@ -260,8 +284,11 @@ class GameView(arcade.View):
                 self.coin_list.append(coin)
         # respawn the player
         for dot in hit_list:
-            self.player_sprite.center_x = self.spawn_points[0][0]
-            self.player_sprite.center_y = self.spawn_points[0][1]
+            if self.human:
+                self.player_sprite.center_x = self.spawn_points[0][0]
+                self.player_sprite.center_y = self.spawn_points[0][1]
+            else:
+                self.player_sprite.alive = False
 
     def collect_coins(self):
         "check if the player collected any coins"
@@ -269,6 +296,7 @@ class GameView(arcade.View):
         hit_list = arcade.check_for_collision_with_list(self.player_sprite, self.coin_list)
         # remove collected coins
         for coin in hit_list:
+            self.player_sprite.reachedCoin = True
             coin.remove_from_sprite_lists()
 
     def check_win(self):
