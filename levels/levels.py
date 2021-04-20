@@ -266,4 +266,69 @@ def level9(game):
 
     coin = dots.Coin((int_x[18], int_y[2]))
     game.level_coins.append(coin)
-    game.coin_list.append(coin)        
+    game.coin_list.append(coin)
+    
+def level10(game):
+    "load player and dots for level 10"
+    game.spawn_points = [(int_x[9], int_y[10]), (int_x[10], int_y[4])]
+    speed = 1
+
+    x_rotate = [7, 7, 5, 5, 10, 10, 12]
+    y_rotate = [7, 5, 4, 2, 7, 5, 3]
+    control = 0
+
+    # Lef to right
+    for i in x_rotate:
+        y_cordinate = y_rotate[control]
+        dot = dots.PathDot(
+            [(mid_x[i], mid_y[y_cordinate]), (mid_x[i + 1], mid_y[y_cordinate]), (mid_x[i], mid_y[y_cordinate]),
+             (mid_x[i + 1], mid_y[y_cordinate])],
+            speed)
+        game.blue_list.append(dot)
+        control += 1
+
+    # Right to left
+
+    x_rotate = [5, 7, 7, 12, 12, 10, 10]
+    y_rotate = [3, 4, 6, 4, 2, 4, 6]
+    control = 0
+
+    for i in x_rotate:
+        y_cordinate = y_rotate[control]
+        dot = dots.PathDot(
+            [(mid_x[i+1], mid_y[y_cordinate]), (mid_x[i], mid_y[y_cordinate]), (mid_x[i+1], mid_y[y_cordinate]),
+             (mid_x[i], mid_y[y_cordinate])],
+            speed)
+        game.blue_list.append(dot)
+        control += 1
+
+    # Up and Down
+
+    x_rotate = [7, 9, 11]
+    y_rotate = [1, 1, 1]
+    control = 0
+
+    for i in x_rotate:
+        y_cordinate = y_rotate[control]
+        dot = dots.PathDot(
+            [(mid_x[i], mid_y[y_cordinate+1]), (mid_x[i], mid_y[y_cordinate]), (mid_x[i], mid_y[y_cordinate + 1]),
+             (mid_x[i], mid_y[y_cordinate])],
+            speed)
+        game.blue_list.append(dot)
+        control += 1
+
+    # Down and Up
+
+    x_rotate = [8, 10]
+    y_rotate = [1, 1]
+    control = 0
+
+    for i in x_rotate:
+        y_cordinate = y_rotate[control]
+        dot = dots.PathDot(
+            [(mid_x[i], mid_y[y_cordinate]), (mid_x[i], mid_y[y_cordinate + 1]), (mid_x[i], mid_y[y_cordinate]),
+             (mid_x[i], mid_y[y_cordinate + 1])],
+            speed)
+        game.blue_list.append(dot)
+        control += 1
+
