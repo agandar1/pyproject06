@@ -43,7 +43,7 @@ class GameView(arcade.View):
     # game variables
     game_over = False
     level = 1
-    max_level = 9
+    max_level = 10
 
     def __init__(self, human):
         super().__init__()
@@ -80,7 +80,8 @@ class GameView(arcade.View):
             "6": levels.level6,
             "7": levels.level7,
             "8": levels.level8,
-            "9": levels.level9
+            "9": levels.level9,
+            "10": levels.level10
         }
         my_map = arcade.tilemap.read_tmx(f"levels/lvl{level}.tmx")
         level_list[str(level)](self)
