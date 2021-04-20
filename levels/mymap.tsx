@@ -55,4 +55,7 @@
  <tile id="62">
   <image width="50" height="50" source="../assets/RwBC.png"/>
  </tile>
+ <tile id="63">
+  <image width="50" height="50" source="../assets/2D1L.png"/>
+ </tile>
 </tileset>
