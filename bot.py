@@ -25,13 +25,24 @@ class Genetic():
         self.directions = []
         self.players = player_list
 
-        # for i in range(int(self.parents_count / 2)):
-        #     self.killWorst()
+        for i in range(int(self.parents_count + 1)):
+            self.killWorst()
+        self.saveBest()
 
         for i in range(len(self.players)):
             self.directions.append(self.players[i].directions)
 
         self.total_fitness = self.totalFitness()
+
+    def saveBest(self):
+        best = 0
+        for i in range(len(self.players)):
+            if self.players[i].fitness > best:
+                best = self.players[i].fitness
+        for i in range(len(self.players)):
+            if self.players[i].fitness == best:
+                self.directions.append(copy.deepcopy(self.players[i].directions))
+                break
 
     def killWorst(self):
         least = 100
@@ -47,6 +58,10 @@ class Genetic():
         for i in range(self.parents_count):
             self.selection()
         self.crossover()
+        self.mutation()
+
+        for baby in self.babies:
+            self.directions.append(baby)
 
         return self.directions
 
@@ -77,6 +92,14 @@ class Genetic():
                 baby1[i] = baby1[i] - baby2[i]
             self.babies.append(baby1)
             self.babies.append(baby2)
+
+    def mutation(self):
+        mutate_rate = 0.01
+        for i in range(len(self.babies)):
+            for j in range(len(self.babies[i])):
+                rand_num = uniform(0, 1)
+                if rand_num < mutate_rate:
+                    self.babies[i][j] = randint(1, 9)
 
 
 class Player(arcade.Sprite):
