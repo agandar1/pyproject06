@@ -27,123 +27,82 @@ class TitleScreen(arcade.View):
         self.window.show_view(modeSelect)
 
 
-class ModeButton(arcade.gui.UIGhostFlatButton):
-
-    def __init__(self, innerText, center_x, center_y,ui_manager):
-        self.innerText = innerText
-        self.ui_manager = ui_manager
-        super().__init__(
-            innerText,
-            center_x=center_x,
-            center_y=center_y,
-            width=250,
-        )
-
-    def on_click(self):
-        """ Called when user lets off button """
-        self.ui_manager.purge_ui_elements()
-        mode = 1
-        if self.innerText == "Train AI":
-            mode = 0
-        elif self.innerText == "Free Play":
-            mode = 1
-        elif self.innerText == "Watch AI":
-            mode = 2
-        levelView = levelSelection(mode)
-        WIN.show_view(levelView)
-
 class ModeSelection(arcade.View):
-    
     def __init__(self):
-        
-        """ This is run once when we switch to this view """
         super().__init__()
-        self.ui_manager = UIManager() 
-        """ This is run once when we switch to this view """
-    
+        self.mode = 0
+
     def on_draw(self):
-        
+        "Draw this view"
+        string = ""
+        if self.mode == 0:
+            string = "Train AI"
+        elif self.mode == 1:
+            string = "Free Play"
+        elif self.mode == 2:
+            string = "Watch AI"
+
         arcade.start_render()
-        arcade.draw_text("Select a Mode", WIDTH / 2, HEIGHT / 1.25 , arcade.color.WHITE, font_size=50, anchor_x="center")
- 
-    def on_show_view(self):
-        
-        self.setup()
+        arcade.draw_text("Use the Arrow Keys to Select a Mode", WIDTH / 2, HEIGHT / 1.25 , arcade.color.WHITE, font_size=30, anchor_x="center")
+        arcade.draw_text(" < "+string+" > ", WIDTH / 2, HEIGHT / 2, arcade.color.WHITE, font_size=50, anchor_x="center")
+        arcade.draw_text("Click Anywhere Continue", WIDTH / 2, HEIGHT / 5, arcade.color.WHITE, font_size=30, anchor_x="center")
+
         arcade.set_background_color(arcade.csscolor.DARK_SLATE_BLUE)
         arcade.set_viewport(0, WIDTH - 1, 0, HEIGHT - 1)
 
-    def setup(self):
-        """ Draw this view """    
 
-        button = ModeButton("Free Play", 475, 415,self.ui_manager)
-        self.ui_manager.add_ui_element(button)
+    def on_mouse_press(self, _x, _y, _button, _modifiers):
+        "If the user presses the mouse button, start the game."
+        levelSelect = LevelSelection(self.mode)
+        self.window.show_view(levelSelect)
 
-        button = ModeButton("Train AI", 475, 300,self.ui_manager)
-        self.ui_manager.add_ui_element(button)
-
-        button = ModeButton("Watch AI", 475, 175, self.ui_manager)
-        self.ui_manager.add_ui_element(button)
-       
-
-class LevelButton(arcade.gui.UIGhostFlatButton):
-
-    def __init__(self, innerText, center_x, center_y, mode, ui_manager, level):
-        self.innerText = innerText
+    def on_key_press(self, symbol, modifiers):
+            if symbol in (arcade.key.D, arcade.key.RIGHT):
+                if self.mode == 2:
+                    self.mode = 0
+                else:
+                    self.mode += 1
+            if symbol in (arcade.key.A, arcade.key.LEFT):
+                if self.mode == 0:
+                    self.mode = 2
+                else:
+                    self.mode -= 1
+class LevelSelection(arcade.View):
+    def __init__(self, mode):
         self.mode = mode
-        self.ui_manager = ui_manager
-        self.level = level
-        super().__init__(
-            innerText,
-            center_x=center_x,
-            center_y=center_y,
-            width=250,
-        )
+        self.level = 1
+        super().__init__()
 
-    def on_click(self):
-        """ Called when user lets off button """ 
-        self.ui_manager.purge_ui_elements()
+    def on_draw(self):
+        "Draw this view"
+        arcade.start_render()
+        arcade.draw_text("Use the Arrow Keys to Select a Level", WIDTH / 2, HEIGHT / 1.25 , arcade.color.WHITE, font_size=30, anchor_x="center")
+        arcade.draw_text(" < "+str(self.level)+" > ", WIDTH / 2, HEIGHT / 2, arcade.color.WHITE, font_size=50, anchor_x="center")
+        arcade.draw_text("Click Anywhere Continue", WIDTH / 2, HEIGHT / 5, arcade.color.WHITE, font_size=30, anchor_x="center")
+
+        arcade.set_background_color(arcade.csscolor.DARK_SLATE_BLUE)
+        arcade.set_viewport(0, WIDTH - 1, 0, HEIGHT - 1)
+
+
+    def on_mouse_press(self, _x, _y, _button, _modifiers):
+        "If the user presses the mouse button, start the game."
         gameView = GameView(self.mode)
         gameView.level = self.level
         gameView.setup()
-        WIN.show_view(gameView)
+        self.window.show_view(gameView)
 
-
-class levelSelection(arcade.View):
-
-    def __init__(self, mode):
-        self.mode = mode
-        """ This is run once when we switch to this view """
-        super().__init__()
-        self.ui_manager = UIManager()
-        
-        """ This is run once when we switch to this view """
-        arcade.set_background_color(arcade.csscolor.DARK_SLATE_BLUE)
-        arcade.set_viewport(0, WIDTH - 1, 0, HEIGHT - 1)
-
-    def on_draw(self):
-        arcade.start_render()
-        arcade.draw_text("Select a Level", WIDTH / 2, HEIGHT / 1.25 , arcade.color.WHITE, font_size=50, anchor_x="center")
- 
-    def on_show_view(self):
-        
-        self.setup()
-        arcade.set_background_color(arcade.csscolor.DARK_SLATE_BLUE)
-        arcade.set_viewport(0, WIDTH - 1, 0, HEIGHT - 1)
-
-    def setup(self):
-        """ Draw this view """ 
-        x_coords = [130, 475, 835]
-        y_coords = [415, 300, 175]
-        count = 1
-
-        for i in range(3):
-            for j in range(3):
-                button = LevelButton("Level "+str(count), x_coords[j], y_coords[i], self.mode, self.ui_manager, count)
-                self.ui_manager.add_ui_element(button)       
-                count += 1
-        button = LevelButton("Level 10", 475, 75, self.mode, self.ui_manager, 10)
-        self.ui_manager.add_ui_element(button)
-       
+    def on_key_press(self, symbol, modifiers):
+            if symbol in (arcade.key.D, arcade.key.RIGHT):
+                if self.level == 10:
+                    self.level = 1
+                else:
+                    self.level += 1
+            if symbol in (arcade.key.A, arcade.key.LEFT):
+                if self.level == 1:
+                    self.level = 10
+                else:
+                    self.level -= 1
+      
 
 class GameView(arcade.View):
     "control game window"
