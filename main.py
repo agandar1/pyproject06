@@ -3,7 +3,7 @@
 import math
 import arcade
 from levels import levels
-from bot import Player
+from bot import Player, Genetic
 
 WIDTH = 1000
 HEIGHT = 600
@@ -21,7 +21,7 @@ class TitleScreen(arcade.View):
 
     def on_mouse_press(self, _x, _y, _button, _modifiers):
         "If the user presses the mouse button, start the game."
-        mode = 1  # 0 is ai train, 1 is human
+        mode = 0  # 0 is ai train, 1 is human
         game_view = GameView(mode)
         game_view.setup()
         self.window.show_view(game_view)
@@ -41,8 +41,8 @@ class GameView(arcade.View):
     down = False
 
     # game variables
-    game_over = False
-    level = 2
+    allDead = False
+    level = 1
     max_level = 9
 
     def __init__(self, human):
@@ -52,7 +52,7 @@ class GameView(arcade.View):
             self.move_count = 0
         else:
             self.player_count = 50
-            self.move_count = 1000
+            self.move_count = 500
 
         self.human = human
         self.setup()
@@ -69,7 +69,7 @@ class GameView(arcade.View):
         self.level_coins = []
         self.load_level(self.level)
 
-    def load_level(self, level):
+    def load_level(self, level, create_players=True):
         "load a specific level"
         level_list = {
             "1": levels.level1,
@@ -86,9 +86,10 @@ class GameView(arcade.View):
         level_list[str(level)](self)
 
         # load the player
-        for i in range(self.player_count):
-            player = Player(self.spawn_points[0], self.move_count, self.human, self.p_speed, self.coin_list, levels.goals[level - 1])
-            self.player_list.append(player)
+        if create_players:
+            for i in range(self.player_count):
+                player = Player(self.spawn_points[0], self.move_count, self.human, self.p_speed, self.level_coins[:], levels.goals[level - 1])
+                self.player_list.append(player)
 
         # load up the map
         self.empty_list = arcade.tilemap.process_layer(my_map, 'empty', 1)
@@ -102,21 +103,36 @@ class GameView(arcade.View):
             self.engine_list.append(physics_engine)
 
     def on_update(self, delta_time):
-        for i, player in enumerate(self.player_list):
-            self.player_sprite = player
-            if self.human:
-                self.move(delta_time)
-            else:
-                player.update(delta_time)
-            self.blue_list.update()
-            self.blue_hit()
-            self.collect_coins()
-            self.check_spawn()
-            self.check_win()
+        self.checkLife()
+
+        if not self.allDead or self.human:
+            for i, player in enumerate(self.player_list):
+                self.player_sprite = player
+                if self.human:
+                    self.move(delta_time)
+                else:
+                    player.update(delta_time)
+                self.blue_list.update()
+                self.blue_hit()
+                self.collect_coins()
+                self.check_spawn()
+                self.check_win()
+        else:
+            self.load_level(self.level, False)
+            alg = Genetic(self.player_list)
+            self.player_list = alg.newPlayers()
 
         # update the physics engine
         for engine in self.engine_list:
             engine.update()
+
+    def checkLife(self):
+        alive = False
+        for player in self.player_list:
+            if player.alive == True:
+                alive = True
+        if not alive:
+            self.allDead = True
 
     def move(self, delta_time):
         "move the player"

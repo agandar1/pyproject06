@@ -16,6 +16,19 @@ class playerBrain():
             self.directions.append(randint(1, 9))
 
 
+class Genetic():
+    players = []
+
+    def __init__(self, player_list):
+        self.players = player_list
+
+    def newPlayers(self):
+        old_players = self.players
+        new_players = old_players[:]
+
+        return new_players
+
+
 class Player(arcade.Sprite):
     "class for the player/s"
     reachedCoin = False
