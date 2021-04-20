@@ -137,6 +137,9 @@ class GameView(arcade.View):
         self.watching = False
         if self.mode == 2:
             self.watching = True
+            self.human = False
+            self.player_count = 1
+            self.move_count = 50
 
     def setup(self):
         "set up the game"
@@ -198,12 +201,12 @@ class GameView(arcade.View):
                 self.check_spawn()
                 self.check_win()
         else:
-            self.newplayers()
+            self.newGeneration()
         # update the physics engine
         for engine in self.engine_list:
             engine.update()
 
-    def newplayers(self):
+    def newGeneration(self):
         self.generation += 1
         gen = Genetic(copy.deepcopy(self.player_list), self.move_count)
         new_directions = gen.newDirections()
@@ -265,13 +268,17 @@ class GameView(arcade.View):
         "check if the player beat the level"
         self.goal_list.update()
         hit_list = arcade.check_for_collision_with_list(self.player_sprite, self.goal_list)
+
         if len(hit_list) > 0 and len(self.coin_list) == 0:
-            self.player_sprite.remove_from_sprite_lists()
-            for dot in self.blue_list:
-                self.blue_list = arcade.SpriteList()
-                self.level_coins = []
-            self.level += 1
-            self.load_level(self.level)
+            if self.watching or self.human:
+                self.player_sprite.remove_from_sprite_lists()
+                for dot in self.blue_list:
+                    self.blue_list = arcade.SpriteList()
+                    self.level_coins = []
+                self.level += 1
+                self.load_level(self.level)
+            else:
+                self.newGeneration()
 
     def check_spawn(self):
         "check if the player reached a checkpoint"
