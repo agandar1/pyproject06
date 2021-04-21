@@ -42,8 +42,11 @@ class Genetic():
     def saveBest(self):
         best = 0
         for i in range(len(self.players)):
-            if self.players[i].fitness > best:
-                best = self.players[i].fitness
+            try:
+                if self.players[i].fitness > best:
+                    best = self.players[i].fitness
+            except:
+                pass
         for i in range(len(self.players)):
             if self.players[i].fitness == best:
                 self.directions.append(copy.deepcopy(self.players[i].directions))
@@ -54,14 +57,17 @@ class Genetic():
                 break
 
     def killWorst(self):
-        least = 100
+        least: int = 100
         for i in range(len(self.players)):
-            if (self.players[i].fitness).real < least:
-                least = self.players[i].fitness
-        for i in range(len(self.players)):
-            if self.players[i].fitness == least:
-                self.players[i].kill()
-                break
+            try:
+                if (self.players[i].fitness).real < least:
+                    least = self.players[i].fitness
+                    for i in range(len(self.players)):
+                        if self.players[i].fitness == least:
+                            self.players[i].kill()
+                            break
+            except:
+                pass
 
     def newDirections(self):
         for i in range(self.parents_count):
@@ -85,9 +91,12 @@ class Genetic():
         rand_num = uniform(0, self.total_fitness)
         for i in range(len(self.players)):
             fitness_sum += self.players[i].fitness
-            if fitness_sum > rand_num:
-                self.parents.append(copy.deepcopy(self.players[i].directions))
-                break
+            try:
+                if fitness_sum > rand_num:
+                    self.parents.append(copy.deepcopy(self.players[i].directions))
+                    break
+            except:
+                pass
 
     def crossover(self):
         while len(self.parents) > 0:
@@ -113,6 +122,7 @@ class Genetic():
 
 class Player(arcade.Sprite):
     "class for the player/s"
+
     def __init__(self, spawn, move_count, human, speed, coinList, goal, level):
         super().__init__("assets/PLAYER.png", 1.15)
         self.reachedCoin = False
@@ -141,11 +151,11 @@ class Player(arcade.Sprite):
     def distance(self, x_2, y_2):
         x_1 = self.center_x
         y_1 = self.center_y
-        return ((((x_2 - x_1)**2) + (y_2 - y_1))**(1 / 2))
+        return ((((x_2 - x_1) ** 2) + (y_2 - y_1)) ** (1 / 2))
 
     def calcFitness(self):
         if not self.reachedCoin:
-            self.fitness = 1.0 / (self.distance(self.currentCoin.center_x, self.currentCoin.center_y)**2)
+            self.fitness = 1.0 / (self.distance(self.currentCoin.center_x, self.currentCoin.center_y) ** 2)
             if len(self.coinList) > 0:
                 self.coinList.pop(0)
                 self.currentCoin = self.coinList[len(self.coinList) - 1]
@@ -153,7 +163,7 @@ class Player(arcade.Sprite):
             else:
                 self.reachedCoin = True
         else:
-            self.fitness = 1.0 / (self.distance(self.goal_x, self.goal_y)**2)
+            self.fitness = 1.0 / (self.distance(self.goal_x, self.goal_y) ** 2)
 
     def update(self, delta_time):
         self.timer += delta_time

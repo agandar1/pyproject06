@@ -183,7 +183,7 @@ class GameView(arcade.View):
             player = Player(self.spawn_points[0], self.move_count, self.human, self.p_speed, self.level_coins[:], levels.goals[level - 1], level)
             self.player_list.append(player)
 
-        if self.watching or (not self.watching and self.generation == 1):
+        if not self.human and (self.watching or (not self.watching and self.generation == 1)):
             self.move_count = len(load)
             self.player_list[0].brain.directions = copy.deepcopy(load)
             self.player_list[0].directions = copy.deepcopy(load)
@@ -229,8 +229,9 @@ class GameView(arcade.View):
 
         if not self.watching:
             for i in range(len(self.player_list)):
-                self.player_list[i].brain.directions = copy.deepcopy(new_directions[i])
-                self.player_list[i].directions = copy.deepcopy(new_directions[i])
+                if i in range(len(new_directions)):
+                    self.player_list[i].brain.directions = copy.deepcopy(new_directions[i])
+                    self.player_list[i].directions = copy.deepcopy(new_directions[i])
 
     def checkLife(self):
         alive = False
