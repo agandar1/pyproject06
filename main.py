@@ -232,9 +232,10 @@ class GameView(arcade.View):
 
         if not self.watching:
             for i in range(len(self.player_list)):
-                self.player_list[i].brain.directions = copy.deepcopy(new_directions[i])
-                self.player_list[i].directions = copy.deepcopy(new_directions[i])
-
+                if i in range(len(new_directions)):
+                    self.player_list[i].brain.directions = copy.deepcopy(new_directions[i])
+                    self.player_list[i].directions = copy.deepcopy(new_directions[i])
+                    
     def checkLife(self):
         alive = False
         for i in range(len(self.player_list)):
