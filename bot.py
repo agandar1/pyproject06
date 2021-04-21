@@ -47,6 +47,11 @@ class Genetic():
         for i in range(len(self.players)):
             if self.players[i].fitness == best:
                 self.directions.append(copy.deepcopy(self.players[i].directions))
+                fileName = "saves/lvl"+str(self.players[i].level)+".txt"
+                with open(fileName, "w") as file:
+                    for directions in self.players[i].directions:
+                        file.write("%i " % directions)
+                print("instructions written")
                 break
 
     def killWorst(self):
@@ -109,12 +114,13 @@ class Genetic():
 
 class Player(arcade.Sprite):
     "class for the player/s"
-    def __init__(self, spawn, move_count, human, speed, coinList, goal):
+    def __init__(self, spawn, move_count, human, speed, coinList, goal, level):
         super().__init__("assets/PLAYER.png", 1.15)
         self.reachedCoin = False
         self.alive = True
         self.fitness = 0
         self.timer = 0
+        self.level = level
 
         if not human:
             self.brain = playerBrain(move_count)
