@@ -42,8 +42,11 @@ class Genetic():
     def saveBest(self):
         best = 0
         for i in range(len(self.players)):
-            if self.players[i].fitness > best:
-                best = self.players[i].fitness
+            try:
+                if self.players[i].fitness > best:
+                    best = self.players[i].fitness
+            except:
+                pass
         for i in range(len(self.players)):
             if self.players[i].fitness == best:
                 self.directions.append(copy.deepcopy(self.players[i].directions))
@@ -54,14 +57,17 @@ class Genetic():
                 break
 
     def killWorst(self):
-        least = 100
+        least: int = 100
         for i in range(len(self.players)):
-            if (self.players[i].fitness).real < least:
-                least = self.players[i].fitness
-        for i in range(len(self.players)):
-            if self.players[i].fitness == least:
-                self.players[i].kill()
-                break
+            try:
+                if (self.players[i].fitness).real < least:
+                    least = self.players[i].fitness
+                    for i in range(len(self.players)):
+                        if self.players[i].fitness == least:
+                            self.players[i].kill()
+                            break
+            except:
+                pass
 
     def newDirections(self):
         for i in range(self.parents_count):
@@ -85,9 +91,12 @@ class Genetic():
         rand_num = uniform(0, self.total_fitness)
         for i in range(len(self.players)):
             fitness_sum += self.players[i].fitness
-            if fitness_sum > rand_num:
-                self.parents.append(copy.deepcopy(self.players[i].directions))
-                break
+            try:
+                if fitness_sum > rand_num:
+                    self.parents.append(copy.deepcopy(self.players[i].directions))
+                    break
+            except:
+                pass
 
     def crossover(self):
         while len(self.parents) > 0:
