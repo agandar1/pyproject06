@@ -169,7 +169,7 @@ class GameView(arcade.View):
 
         # load the player
         for i in range(self.player_count):
-            player = Player(self.spawn_points[0], self.move_count, self.human, self.p_speed, self.level_coins[:], levels.goals[level - 1])
+            player = Player(self.spawn_points[0], self.move_count, self.human, self.p_speed, self.level_coins[:], levels.goals[level - 1], level)
             self.player_list.append(player)
 
         # load up the map
