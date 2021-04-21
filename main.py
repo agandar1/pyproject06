@@ -132,7 +132,7 @@ class GameView(arcade.View):
         else:
             self.human = False
             self.player_count = 50
-            self.move_count = 50
+            self.move_count = 25
 
         self.watching = False
         if self.mode == 2:
@@ -177,6 +177,8 @@ class GameView(arcade.View):
         for i in line:
             if i.isdigit():
                 load.append(int(i))
+            if (len(load) > 0) and self.generation == 1:
+                self.move_count = len(load)
 
         # load the player
         for i in range(self.player_count):
@@ -184,9 +186,9 @@ class GameView(arcade.View):
             self.player_list.append(player)
 
         if not self.human and (self.watching or (not self.watching and self.generation == 1)):
-            self.move_count = len(load)
-            self.player_list[0].brain.directions = copy.deepcopy(load)
-            self.player_list[0].directions = copy.deepcopy(load)
+            if len(load) > 0:
+                self.player_list[0].brain.directions = copy.deepcopy(load)
+                self.player_list[0].directions = copy.deepcopy(load)
 
         # load up the map
         self.empty_list = arcade.tilemap.process_layer(my_map, 'empty', 1)
@@ -221,10 +223,11 @@ class GameView(arcade.View):
 
     def newGeneration(self):
         self.generation += 1
+        print("generation:", self.generation)
         gen = Genetic(copy.deepcopy(self.player_list), self.move_count)
         new_directions = gen.newDirections()
-        if self.generation % 5 == 0:
-            self.move_count += 20
+        if self.generation % 5 == 0 and self.move_count <= 500:
+            self.move_count += 10
         self.setup()
 
         if not self.watching:
