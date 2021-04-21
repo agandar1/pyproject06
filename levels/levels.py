@@ -19,7 +19,7 @@ def level1(game):
     "load player and dots for level 1"
     # load the player
     game.spawn_points = [(mid_x[2], mid_y[6])]
-    if game.human:
+    if game.human or game.watching:
         speed = 6
     else:
         speed = 0.21
