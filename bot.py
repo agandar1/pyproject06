@@ -159,7 +159,7 @@ class Player(arcade.Sprite):
         self.timer += delta_time
         if self.alive:
             if len(self.brain.directions) > 0:
-                if self.timer > delta_time * 2.7:
+                if self.timer > delta_time * 3:
                     self.move(delta_time)
                     self.timer = 0
             else:

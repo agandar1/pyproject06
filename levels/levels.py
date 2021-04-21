@@ -12,6 +12,13 @@ goals = [
     (mid_x[16], mid_y[5]),
     (mid_x[16], int_y[6]),
     (mid_x[10], int_y[6]),
+    (mid_x[5], int_y[5]),
+    (mid_x[12], int_y[6]),  # 5
+    (mid_x[16], int_y[6]),  # 6
+    (mid_x[16], int_y[6]),  # 7
+    (mid_x[14], int_y[6]),  # 8
+    (int_x[18], int_y[6]),  # 9
+    (mid_x[11], int_y[10])  # 10
 ]
 
 
