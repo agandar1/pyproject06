@@ -19,7 +19,6 @@ goals = [
     (mid_x[14], int_y[6]),  # 8
     (int_x[18], int_y[6]),  # 9
     (mid_x[11], int_y[10])  # 10
-
 ]
 
 
@@ -340,7 +339,6 @@ def level9(game):
 
 def level10(game):
     "load player and dots for level 10"
-
     if game.human:
         speed = 1
     else:
