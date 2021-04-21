@@ -43,7 +43,7 @@ def level2(game):
     if game.human:
         speed = 5
     else:
-        speed = 0.215
+        speed = 0.15
 
     for i in range(4, 16):
         dot = dots.PathDot([(mid_x[i], mid_y[3]), (mid_x[i], mid_y[8])], speed)
