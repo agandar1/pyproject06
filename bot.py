@@ -47,11 +47,10 @@ class Genetic():
         for i in range(len(self.players)):
             if self.players[i].fitness == best:
                 self.directions.append(copy.deepcopy(self.players[i].directions))
-                fileName = "saves/lvl"+str(self.players[i].level)+".txt"
+                fileName = "saves/lvl" + str(self.players[i].level) + ".txt"
                 with open(fileName, "w") as file:
                     for directions in self.players[i].directions:
                         file.write("%i " % directions)
-                print("instructions written")
                 break
 
     def killWorst(self):

@@ -170,10 +170,23 @@ class GameView(arcade.View):
         my_map = arcade.tilemap.read_tmx(f"levels/lvl{level}.tmx")
         level_list[str(level)](self)
 
+        load = []
+        fileName = "saves/lvl" + str(level) + ".txt"
+        myfile = open(fileName, 'r')
+        line = myfile.readline()
+        for i in line:
+            if i.isdigit():
+                load.append(int(i))
+
         # load the player
         for i in range(self.player_count):
             player = Player(self.spawn_points[0], self.move_count, self.human, self.p_speed, self.level_coins[:], levels.goals[level - 1], level)
             self.player_list.append(player)
+
+        if self.watching or (not self.watching and self.generation == 1):
+            self.move_count = len(load)
+            self.player_list[0].brain.directions = copy.deepcopy(load)
+            self.player_list[0].directions = copy.deepcopy(load)
 
         # load up the map
         self.empty_list = arcade.tilemap.process_layer(my_map, 'empty', 1)
@@ -214,9 +227,10 @@ class GameView(arcade.View):
             self.move_count += 20
         self.setup()
 
-        for i in range(len(self.player_list)):
-            self.player_list[i].brain.directions = copy.deepcopy(new_directions[i])
-            self.player_list[i].directions = copy.deepcopy(new_directions[i])
+        if not self.watching:
+            for i in range(len(self.player_list)):
+                self.player_list[i].brain.directions = copy.deepcopy(new_directions[i])
+                self.player_list[i].directions = copy.deepcopy(new_directions[i])
 
     def checkLife(self):
         alive = False
