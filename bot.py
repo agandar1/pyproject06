@@ -122,6 +122,7 @@ class Genetic():
 
 class Player(arcade.Sprite):
     "class for the player/s"
+
     def __init__(self, spawn, move_count, human, speed, coinList, goal, level):
         super().__init__("assets/PLAYER.png", 1.15)
         self.reachedCoin = False
@@ -150,11 +151,11 @@ class Player(arcade.Sprite):
     def distance(self, x_2, y_2):
         x_1 = self.center_x
         y_1 = self.center_y
-        return ((((x_2 - x_1)**2) + (y_2 - y_1))**(1 / 2))
+        return ((((x_2 - x_1) ** 2) + (y_2 - y_1)) ** (1 / 2))
 
     def calcFitness(self):
         if not self.reachedCoin:
-            self.fitness = 1.0 / (self.distance(self.currentCoin.center_x, self.currentCoin.center_y)**2)
+            self.fitness = 1.0 / (self.distance(self.currentCoin.center_x, self.currentCoin.center_y) ** 2)
             if len(self.coinList) > 0:
                 self.coinList.pop(0)
                 self.currentCoin = self.coinList[len(self.coinList) - 1]
@@ -162,7 +163,7 @@ class Player(arcade.Sprite):
             else:
                 self.reachedCoin = True
         else:
-            self.fitness = 1.0 / (self.distance(self.goal_x, self.goal_y)**2)
+            self.fitness = 1.0 / (self.distance(self.goal_x, self.goal_y) ** 2)
 
     def update(self, delta_time):
         self.timer += delta_time

@@ -72,27 +72,38 @@ def level3(game):
     else:
         speed = 0.08
 
-    dot = dots.PathDot([(mid_x[9], mid_y[7]), (mid_x[11], mid_y[7]), (mid_x[11], mid_y[4]), (mid_x[8], mid_y[4]), (mid_x[8], mid_y[7])], speed)
+    dot = dots.PathDot([(mid_x[9], mid_y[7]), (mid_x[11], mid_y[7]), (mid_x[11], mid_y[4]), (mid_x[8], mid_y[4]),
+                        (mid_x[8], mid_y[7])], speed)
     game.blue_list.append(dot)
-    dot = dots.PathDot([(mid_x[10], mid_y[7]), (mid_x[11], mid_y[7]), (mid_x[11], mid_y[4]), (mid_x[8], mid_y[4]), (mid_x[8], mid_y[7])], speed)
+    dot = dots.PathDot([(mid_x[10], mid_y[7]), (mid_x[11], mid_y[7]), (mid_x[11], mid_y[4]), (mid_x[8], mid_y[4]),
+                        (mid_x[8], mid_y[7])], speed)
     game.blue_list.append(dot)
-    dot = dots.PathDot([(mid_x[11], mid_y[7]), (mid_x[11], mid_y[4]), (mid_x[8], mid_y[4]), (mid_x[8], mid_y[7])], speed)
+    dot = dots.PathDot([(mid_x[11], mid_y[7]), (mid_x[11], mid_y[4]), (mid_x[8], mid_y[4]), (mid_x[8], mid_y[7])],
+                       speed)
     game.blue_list.append(dot)
-    dot = dots.PathDot([(mid_x[11], mid_y[6]), (mid_x[11], mid_y[4]), (mid_x[8], mid_y[4]), (mid_x[8], mid_y[7]), (mid_x[11], mid_y[7])], speed)
+    dot = dots.PathDot([(mid_x[11], mid_y[6]), (mid_x[11], mid_y[4]), (mid_x[8], mid_y[4]), (mid_x[8], mid_y[7]),
+                        (mid_x[11], mid_y[7])], speed)
     game.blue_list.append(dot)
-    dot = dots.PathDot([(mid_x[11], mid_y[5]), (mid_x[11], mid_y[4]), (mid_x[8], mid_y[4]), (mid_x[8], mid_y[7]), (mid_x[11], mid_y[7])], speed)
+    dot = dots.PathDot([(mid_x[11], mid_y[5]), (mid_x[11], mid_y[4]), (mid_x[8], mid_y[4]), (mid_x[8], mid_y[7]),
+                        (mid_x[11], mid_y[7])], speed)
     game.blue_list.append(dot)
-    dot = dots.PathDot([(mid_x[11], mid_y[4]), (mid_x[8], mid_y[4]), (mid_x[8], mid_y[7]), (mid_x[11], mid_y[7])], speed)
+    dot = dots.PathDot([(mid_x[11], mid_y[4]), (mid_x[8], mid_y[4]), (mid_x[8], mid_y[7]), (mid_x[11], mid_y[7])],
+                       speed)
     game.blue_list.append(dot)
-    dot = dots.PathDot([(mid_x[10], mid_y[4]), (mid_x[8], mid_y[4]), (mid_x[8], mid_y[7]), (mid_x[11], mid_y[7]), (mid_x[11], mid_y[4])], speed)
+    dot = dots.PathDot([(mid_x[10], mid_y[4]), (mid_x[8], mid_y[4]), (mid_x[8], mid_y[7]), (mid_x[11], mid_y[7]),
+                        (mid_x[11], mid_y[4])], speed)
     game.blue_list.append(dot)
-    dot = dots.PathDot([(mid_x[9], mid_y[4]), (mid_x[8], mid_y[4]), (mid_x[8], mid_y[7]), (mid_x[11], mid_y[7]), (mid_x[11], mid_y[4])], speed)
+    dot = dots.PathDot([(mid_x[9], mid_y[4]), (mid_x[8], mid_y[4]), (mid_x[8], mid_y[7]), (mid_x[11], mid_y[7]),
+                        (mid_x[11], mid_y[4])], speed)
     game.blue_list.append(dot)
-    dot = dots.PathDot([(mid_x[8], mid_y[4]), (mid_x[8], mid_y[7]), (mid_x[11], mid_y[7]), (mid_x[11], mid_y[4])], speed)
+    dot = dots.PathDot([(mid_x[8], mid_y[4]), (mid_x[8], mid_y[7]), (mid_x[11], mid_y[7]), (mid_x[11], mid_y[4])],
+                       speed)
     game.blue_list.append(dot)
-    dot = dots.PathDot([(mid_x[8], mid_y[5]), (mid_x[8], mid_y[7]), (mid_x[11], mid_y[7]), (mid_x[11], mid_y[4]), (mid_x[8], mid_y[4])], speed)
+    dot = dots.PathDot([(mid_x[8], mid_y[5]), (mid_x[8], mid_y[7]), (mid_x[11], mid_y[7]), (mid_x[11], mid_y[4]),
+                        (mid_x[8], mid_y[4])], speed)
     game.blue_list.append(dot)
-    dot = dots.PathDot([(mid_x[8], mid_y[6]), (mid_x[8], mid_y[7]), (mid_x[11], mid_y[7]), (mid_x[11], mid_y[4]), (mid_x[8], mid_y[4])], speed)
+    dot = dots.PathDot([(mid_x[8], mid_y[6]), (mid_x[8], mid_y[7]), (mid_x[11], mid_y[7]), (mid_x[11], mid_y[4]),
+                        (mid_x[8], mid_y[4])], speed)
     game.blue_list.append(dot)
 
     coin = dots.Coin((mid_x[8], mid_y[8]))
@@ -102,12 +113,12 @@ def level3(game):
 
 def level4(game):
     "load player and dots for level 4"
-    
+
     if game.human:
         speed = 0.035
     else:
         speed = 0.0012
-        
+
     game.spawn_points = [(int_x[10], int_y[10])]
 
     radiuses = [35, 70, 105, 140, 175]
@@ -130,7 +141,7 @@ def level4(game):
 
 def level5(game):
     "load player and dots for level 5"
-    
+
     if game.human:
         speed = 0.025
     else:
@@ -150,12 +161,12 @@ def level5(game):
 
 def level6(game):
     "load player and dots for level 6"
-    
+
     if game.human:
         speed = 0.035
     else:
         speed = 0.08
-        
+
     game.spawn_points = [(int_x[3], int_y[8]), (int_x[17], int_x[6])]
 
     radiuses = [30, 60, 90]
@@ -195,12 +206,12 @@ def level6(game):
 
 def level7(game):
     "load player and dots for level 7"
-    
+
     if game.human:
         speed = 7
     else:
         speed = 0.08
-        
+
     game.spawn_points = [(mid_x[2], int_y[6])]
 
     for i in range(4, 16):
@@ -222,21 +233,24 @@ def level7(game):
 
 def level8(game):
     "load player and dots for level 8"
-    
+
     if game.human:
         speed = 4
     else:
-        
-    game.spawn_points = [(mid_x[5], mid_y[9])]
-    speed = 4
+        speed = 0.08
 
-    dot = dots.PathDot([(mid_x[7], mid_y[9]), (mid_x[10], mid_y[9]), (mid_x[10], mid_y[2]), (mid_x[7], mid_y[2])], speed)
+    game.spawn_points = [(mid_x[5], mid_y[9])]
+
+    dot = dots.PathDot([(mid_x[7], mid_y[9]), (mid_x[10], mid_y[9]), (mid_x[10], mid_y[2]), (mid_x[7], mid_y[2])],
+                       speed)
     game.blue_list.append(dot)
 
     for i in range(1, 8, 3):
-        dot = dots.PathDot([(mid_x[4], mid_y[i+3]), (mid_x[7], mid_y[i+3]), (mid_x[7], mid_y[i]), (mid_x[4], mid_y[i])], speed)
+        dot = dots.PathDot(
+            [(mid_x[4], mid_y[i + 3]), (mid_x[7], mid_y[i + 3]), (mid_x[7], mid_y[i]), (mid_x[4], mid_y[i])], speed)
         game.blue_list.append(dot)
-        dot = dots.PathDot([(mid_x[13], mid_y[i+3]), (mid_x[10], mid_y[i+3]), (mid_x[10], mid_y[i]), (mid_x[13], mid_y[i])], speed)
+        dot = dots.PathDot(
+            [(mid_x[13], mid_y[i + 3]), (mid_x[10], mid_y[i + 3]), (mid_x[10], mid_y[i]), (mid_x[13], mid_y[i])], speed)
         game.blue_list.append(dot)
 
     coins = [(mid_x[4], mid_y[1]),
@@ -251,7 +265,7 @@ def level8(game):
 
 def level9(game):
     "load player and dots for level 9"
-    
+
     if game.human:
         speed = 5
     else:
@@ -321,14 +335,15 @@ def level9(game):
     coin = dots.Coin((int_x[18], int_y[2]))
     game.level_coins.append(coin)
     game.coin_list.append(coin)
-    
+
+
 def level10(game):
     "load player and dots for level 10"
     if game.human:
         speed = 1
     else:
         speed = 0.08
-        
+
     game.spawn_points = [(int_x[9], int_y[10]), (int_x[10], int_y[4])]
 
     x_rotate = [7, 7, 5, 5, 10, 10, 12]
@@ -354,7 +369,7 @@ def level10(game):
     for i in x_rotate:
         y_cordinate = y_rotate[control]
         dot = dots.PathDot(
-            [(mid_x[i+1], mid_y[y_cordinate]), (mid_x[i], mid_y[y_cordinate]), (mid_x[i+1], mid_y[y_cordinate]),
+            [(mid_x[i + 1], mid_y[y_cordinate]), (mid_x[i], mid_y[y_cordinate]), (mid_x[i + 1], mid_y[y_cordinate]),
              (mid_x[i], mid_y[y_cordinate])],
             speed)
         game.blue_list.append(dot)
@@ -369,7 +384,7 @@ def level10(game):
     for i in x_rotate:
         y_cordinate = y_rotate[control]
         dot = dots.PathDot(
-            [(mid_x[i], mid_y[y_cordinate+1]), (mid_x[i], mid_y[y_cordinate]), (mid_x[i], mid_y[y_cordinate + 1]),
+            [(mid_x[i], mid_y[y_cordinate + 1]), (mid_x[i], mid_y[y_cordinate]), (mid_x[i], mid_y[y_cordinate + 1]),
              (mid_x[i], mid_y[y_cordinate])],
             speed)
         game.blue_list.append(dot)
@@ -389,4 +404,3 @@ def level10(game):
             speed)
         game.blue_list.append(dot)
         control += 1
-
