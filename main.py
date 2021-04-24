@@ -202,15 +202,17 @@ class GameView(arcade.View):
             self.engine_list.append(physics_engine)
 
     def on_update(self, delta_time):
+        self.blue_list.update()
         self.checkLife()
         if not self.allDead or self.human:
             for i, player in enumerate(self.player_list):
+                if i % 5 == 0:
+                    self.blue_list.update()
                 self.player_sprite = player
                 if self.human:
                     self.move(delta_time)
                 else:
                     player.update(delta_time)
-                self.blue_list.update()
                 self.blue_hit()
                 self.collect_coins()
                 self.check_spawn()
@@ -340,6 +342,9 @@ class GameView(arcade.View):
                 self.up = True
             if symbol in (arcade.key.S, arcade.key.DOWN):
                 self.down = True
+        if symbol == arcade.key.Q:
+            modeSelect = ModeSelection()
+            self.window.show_view(modeSelect)
 
     def on_key_release(self, symbol, modifiers):
         if self.human or not self.human:
