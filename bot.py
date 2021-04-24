@@ -177,12 +177,16 @@ class Player(arcade.Sprite):
         if not self.alive:
             if self.fitness == 0:
                 self.calcFitness()
+            self.move(delta_time)
             self.change_x = 0
             self.change_y = 0
 
     def move(self, delta_time):
         "move the player"
-        direction = self.brain.directions.pop()
+        if len(self.brain.directions) > 0:
+            direction = self.brain.directions.pop()
+        else:
+            direction = 9
         if direction == 1:
             self.change_x = self.speed * delta_time
             self.change_y = 0
