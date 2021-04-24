@@ -206,8 +206,6 @@ class GameView(arcade.View):
         self.checkLife()
         if not self.allDead or self.human:
             for i, player in enumerate(self.player_list):
-                if i % 5 == 0:
-                    self.blue_list.update()
                 self.player_sprite = player
                 if self.human:
                     self.move(delta_time)
