@@ -12,13 +12,14 @@ goals = [
     (mid_x[16], mid_y[5]),  # 1
     (mid_x[16], int_y[6]),  # 2
     (mid_x[10], int_y[6]),  # 3
-    (mid_x[5], int_y[5]),   # 4
+    (mid_x[5], int_y[5]),  # 4
     (mid_x[12], int_y[6]),  # 5
     (mid_x[16], int_y[6]),  # 6
     (mid_x[16], int_y[6]),  # 7
     (mid_x[14], int_y[6]),  # 8
     (int_x[18], int_y[6]),  # 9
-    (mid_x[11], int_y[10])  # 10
+    (mid_x[11], int_y[10]),  # 10
+    (mid_x[11], int_y[10]),  # 11
 ]
 
 speeds = [
@@ -31,8 +32,10 @@ speeds = [
     (7, 0.08),
     (4, 0.08),
     (5, 0.08),
-    (1, 0.08)
+    (1, 0.08),
+    (3, 0.08)
 ]
+
 
 def level1(game):
     "load player and dots for level 1"
@@ -77,7 +80,6 @@ def level2(game):
 def level3(game):
     "load player and dots for level 3"
     game.spawn_points = [(int_x[10], int_y[6])]
-    speed = 3
     if game.human or game.watching:
         speed = speeds[game.level - 1][0]
     else:
@@ -415,3 +417,82 @@ def level10(game):
             speed)
         game.blue_list.append(dot)
         control += 1
+
+
+def level11(game):
+    "load player and dots for level 10"
+    if game.human or game.watching:
+        speed = speeds[game.level - 1][0]
+    else:
+        speed = speeds[game.level - 1][1]
+
+    game.spawn_points = [(int_x[17], int_y[7])]
+
+    x_rotate = [6, 8, 10, 12]
+    y_rotate = [3, 3, 3, 3]
+    control = 0
+
+    # down up
+
+    for i in x_rotate:
+        y_cordinate = y_rotate[control]
+        dot = dots.PathDot(
+            [(mid_x[i], int_y[y_cordinate]), (mid_x[i], int_y[y_cordinate + 7]), (mid_x[i], int_y[y_cordinate]),
+             (mid_x[i], int_y[y_cordinate + 7])],
+            speed)
+        game.blue_list.append(dot)
+        control += 1
+
+    # up down
+    x_rotate = [7, 9, 11, 13]
+    y_rotate = [10, 10, 10, 10]
+    control = 0
+
+    for i in x_rotate:
+        y_cordinate = y_rotate[control]
+        dot = dots.PathDot(
+            [(mid_x[i], int_y[y_cordinate]), (mid_x[i], int_y[y_cordinate - 7]), (mid_x[i], int_y[y_cordinate]),
+             (mid_x[i], int_y[y_cordinate - 7])],
+            speed)
+        game.blue_list.append(dot)
+        control += 1
+
+    # Left right
+
+    x_rotate = [6, 6, 6, 6]
+    y_rotate = [9, 7, 5, 3]
+    control = 0
+
+    for i in x_rotate:
+        y_cordinate = y_rotate[control]
+        dot = dots.PathDot(
+            [(mid_x[i], mid_y[y_cordinate]), (mid_x[i + 7], mid_y[y_cordinate]), (mid_x[i], mid_y[y_cordinate]),
+             (mid_x[i + 7], mid_y[y_cordinate])],
+            speed)
+        game.blue_list.append(dot)
+        control += 1
+
+    # right to left
+
+    x_rotate = [13, 13, 13]
+    y_rotate = [8, 6, 4]
+    control = 0
+
+    for i in x_rotate:
+        y_cordinate = y_rotate[control]
+        dot = dots.PathDot(
+            [(mid_x[i], mid_y[y_cordinate]), (mid_x[i - 7], mid_y[y_cordinate]), (mid_x[i], mid_y[y_cordinate]),
+             (mid_x[i - 7], mid_y[y_cordinate])],
+            speed)
+        game.blue_list.append(dot)
+        control += 1
+
+    coins = [(mid_x[6], int_y[6]),
+             (int_x[10], mid_y[9]),
+             (mid_x[13], int_y[6]),
+             (int_x[10], mid_y[2])]
+
+    for coinPoint in coins:
+        coin = dots.Coin(coinPoint)
+        game.level_coins.append(coin)
+        game.coin_list.append(coin)
