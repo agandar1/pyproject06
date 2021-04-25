@@ -46,11 +46,12 @@ class Genetic():
                 if self.players[i].fitness > best:
                     best = self.players[i].fitness
             except:
+                print("Error while trying to find Best")
                 pass
         for i in range(len(self.players)):
             if self.players[i].fitness == best:
-                self.directions.append(copy.deepcopy(self.players[i].directions))
-                fileName = "saves/lvl" + str(self.players[i].level) + ".txt"
+                self.directions.append(copy.deepcopy(self.players[i].directions)) 
+                fileName = "saves/lvl" + str(self.players[i].level) + ".txt" 
                 with open(fileName, "w") as file:
                     for directions in self.players[i].directions:
                         file.write("%i " % directions)
@@ -119,7 +120,6 @@ class Genetic():
                 if rand_num < mutate_rate:
                     self.babies[i][j] = randint(1, 9)
 
-
 class Player(arcade.Sprite):
     "class for the player/s"
 
@@ -130,6 +130,10 @@ class Player(arcade.Sprite):
         self.fitness = 0
         self.timer = 0
         self.level = level
+        self.reachedGoal = False
+        self.DotDeath = False
+        self.move_count = move_count
+        self.steps = 0
 
         if not human:
             self.brain = playerBrain(move_count)
@@ -154,16 +158,32 @@ class Player(arcade.Sprite):
         return ((((x_2 - x_1) ** 2) + (y_2 - y_1)) ** (1 / 2))
 
     def calcFitness(self):
-        if not self.reachedCoin:
-            self.fitness = 1.0 / (self.distance(self.currentCoin.center_x, self.currentCoin.center_y) ** 2)
-            if len(self.coinList) > 0:
-                self.coinList.pop(0)
-                self.currentCoin = self.coinList[len(self.coinList) - 1]
-                self.reachedCoin = False
-            else:
-                self.reachedCoin = True
+
+        #if not self.reachedCoin:
+        #    self.fitness = 1.0 / (self.distance(self.currentCoin.center_x, self.currentCoin.center_y) ** 2)
+        #    if len(self.coinList) > 0:
+        #        self.coinList.pop(0)
+        #        self.currentCoin = self.coinList[len(self.coinList) - 1]
+        #        self.reachedCoin = False
+        #    else:
+        #        self.reachedCoin = True
+        #else:
+        #    self.fitness = 1.0 / (self.distance(self.goal_x, self.goal_y) ** 2)
+        
+        if self.reachedGoal:
+            self.fitness = 1.0/16.0 + 10000.0/(self.steps * self.steps)
         else:
-            self.fitness = 1.0 / (self.distance(self.goal_x, self.goal_y) ** 2)
+            approxDistance = self.distance(self.goal_x, self.goal_y)
+            if self.DotDeath:
+                approxDistance *= 0.9
+            self.fitness = 1.0/(approxDistance * approxDistance)
+        self.fitness *= self.fitness 
+        if self.reachedCoin:
+            self.fitness *= 1.2
+        
+        #To print each player's fitness
+        #print("{:.12f}".format(self.fitness))
+
 
     def update(self, delta_time):
         self.timer += delta_time
@@ -214,3 +234,4 @@ class Player(arcade.Sprite):
         if direction == 9:
             self.change_x = 0
             self.change_y = 0
+        self.steps+= 1

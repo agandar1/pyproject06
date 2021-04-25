@@ -174,6 +174,7 @@ class GameView(arcade.View):
         fileName = "saves/lvl" + str(level) + ".txt"
         myfile = open(fileName, 'r')
         line = myfile.readline()
+        myfile.close()
         for i in line:
             if i.isdigit():
                 load.append(int(i))
@@ -223,7 +224,8 @@ class GameView(arcade.View):
 
     def newGeneration(self):
         self.generation += 1
-        print("generation:", self.generation)
+        if not self.watching:
+            print("generation:", self.generation)
         gen = Genetic(copy.deepcopy(self.player_list), self.move_count)
         new_directions = gen.newDirections()
         if self.generation % 5 == 0 and self.move_count <= 500:
@@ -272,6 +274,7 @@ class GameView(arcade.View):
                 self.player_sprite.center_y = self.spawn_points[0][1]
             else:
                 self.player_sprite.alive = False
+                self.player_sprite.DotDeath = True
 
     def collect_coins(self):
         "check if the player collected any coins"
@@ -295,6 +298,7 @@ class GameView(arcade.View):
                     self.level_coins = []
                 self.level += 1
                 self.load_level(self.level)
+                self.player_sprite.reachedGoal = True
             else:
                 self.newGeneration()
 
