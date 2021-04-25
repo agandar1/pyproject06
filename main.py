@@ -92,13 +92,13 @@ class LevelSelection(arcade.View):
 
     def on_key_press(self, symbol, modifiers):
         if symbol in (arcade.key.D, arcade.key.RIGHT):
-            if self.level == 10:
+            if self.level == 11:
                 self.level = 1
             else:
                 self.level += 1
         if symbol in (arcade.key.A, arcade.key.LEFT):
             if self.level == 1:
-                self.level = 10
+                self.level = 11
             else:
                 self.level -= 1
 
@@ -119,7 +119,7 @@ class GameView(arcade.View):
     # game variables
     allDead = False
     level = 1
-    max_level = 10
+    max_level = 11
     generation = 1
 
     def __init__(self, mode):
@@ -165,7 +165,8 @@ class GameView(arcade.View):
             "7": levels.level7,
             "8": levels.level8,
             "9": levels.level9,
-            "10": levels.level10
+            "10": levels.level10,
+            "11": levels.level11
         }
         my_map = arcade.tilemap.read_tmx(f"levels/lvl{level}.tmx")
         level_list[str(level)](self)
