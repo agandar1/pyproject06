@@ -46,7 +46,6 @@ class ModeSelection(arcade.View):
         arcade.draw_text(" < " + string + " > ", WIDTH / 2, HEIGHT / 2, arcade.color.WHITE, font_size=50, anchor_x="center")
         arcade.draw_text("Click Anywhere to Continue", WIDTH / 2, HEIGHT / 5, arcade.color.WHITE, font_size=30, anchor_x="center")
 
-
         arcade.set_background_color(arcade.csscolor.DARK_SLATE_BLUE)
         arcade.set_viewport(0, WIDTH - 1, 0, HEIGHT - 1)
 
@@ -78,11 +77,9 @@ class LevelSelection(arcade.View):
         "Draw this view"
         arcade.start_render()
 
-
         arcade.draw_text("Use the Arrow Keys to Select a Level", WIDTH / 2, HEIGHT / 1.25, arcade.color.WHITE, font_size=30, anchor_x="center")
         arcade.draw_text(" < " + str(self.level) + " > ", WIDTH / 2, HEIGHT / 2, arcade.color.WHITE, font_size=50, anchor_x="center")
         arcade.draw_text("Click Anywhere to Continue", WIDTH / 2, HEIGHT / 5, arcade.color.WHITE, font_size=30, anchor_x="center")
-
 
         arcade.set_background_color(arcade.csscolor.DARK_SLATE_BLUE)
         arcade.set_viewport(0, WIDTH - 1, 0, HEIGHT - 1)
@@ -139,14 +136,14 @@ class GameView(arcade.View):
         else:
             self.human = False
             self.player_count = 50
-            self.move_count = 25
+            self.move_count = 200
 
         self.watching = False
         if self.mode == 2:
             self.watching = True
             self.human = False
             self.player_count = 1
-            self.move_count = 50
+            self.move_count = 150
 
     def setup(self):
         "set up the game"
@@ -211,9 +208,9 @@ class GameView(arcade.View):
 
         self.engine_list = []
         for sprite in self.player_list:
-            physics_engine = arcade.PhysicsEnginePlatformer(sprite, self.wall_list, 0)
+            physics_engine = arcade.PhysicsEngineSimple(sprite, self.wall_list)
             self.engine_list.append(physics_engine)
-        
+
     def on_update(self, delta_time):
         self.blue_list.update()
         self.checkLife()
@@ -240,8 +237,6 @@ class GameView(arcade.View):
             print("generation:", self.generation)
             gen = Genetic(copy.deepcopy(self.player_list), self.move_count)
             new_directions = gen.newDirections()
-        if self.generation % 5 == 0 and self.move_count <= 500:
-            self.move_count += 10
         self.setup()
 
         if not self.watching:
@@ -365,9 +360,9 @@ class GameView(arcade.View):
                     self.level = 1
                     self.setup()
                 else:
-                    self.level = self.level+1
+                    self.level = self.level + 1
                     self.setup()
-                
+
     def on_key_release(self, symbol, modifiers):
         if self.human or not self.human:
             if symbol in (arcade.key.D, arcade.key.RIGHT):
