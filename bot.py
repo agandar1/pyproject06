@@ -7,11 +7,13 @@ import copy
 
 class playerBrain():
     def __init__(self, move_count):
+        "create a list of moves"
         self.directions = []
         self.move_count = move_count
         self.randomMoves()
 
     def randomMoves(self):
+        "give random moves to the player"
         for i in range(self.move_count):
             self.directions.append(randint(1, 9))
 
@@ -20,22 +22,26 @@ class Genetic():
     parents_count = 10
 
     def __init__(self, player_list, move_count):
+        "setup for algorithm"
         self.parents = []
         self.babies = []
         self.directions = []
         self.players = player_list
         self.moves = move_count
 
+        # kill the worst 10 players
         for i in range(int(self.parents_count + 1)):
             self.killWorst()
+
+        # put the best player directly in the new generation
         self.saveBest()
 
+        # create most of the new generation
         for i in range(len(self.players)):
             self.directions.append(self.players[i].directions)
 
-        self.total_fitness = self.totalFitness()
-
     def saveBest(self):
+        "save the best player for the next generation"
         best = 0
         index = 0
         for i in range(len(self.players)):
@@ -46,6 +52,7 @@ class Genetic():
             except TypeError:
                 continue
 
+        # also save the best instructions into a file for loading later
         self.directions.append(copy.deepcopy(self.players[index].directions))
         fileName = "saves/lvl" + str(self.players[index].level) + ".txt"
         with open(fileName, "w") as file:
@@ -53,16 +60,17 @@ class Genetic():
                 file.write("%i " % directions)
 
     def killWorst(self):
+        "get rid of the worst player"
         least = 100
         index = 0
         for i in range(len(self.players)):
             if (self.players[i].fitness).real < least:
                 least = self.players[i].fitness
                 index = i
-
         self.players[index].kill()
 
     def newDirections(self):
+        "return a the new brains for the new generation"
         for i in range(self.parents_count):
             self.selection()
         self.crossover()
@@ -72,13 +80,8 @@ class Genetic():
             self.directions.append(baby)
         return self.directions
 
-    def totalFitness(self):
-        total_fitness = 0
-        for i in range(len(self.players)):
-            total_fitness += self.players[i].fitness
-        return total_fitness
-
     def selection(self):
+        "choose the top 10 parents for reproduction"
         indexes = []
         for i in range(self.parents_count):
             best = 0
@@ -95,6 +98,7 @@ class Genetic():
             indexes.append(index)
 
     def crossover(self):
+        "combine pairs of parents into new offspring"
         while len(self.parents) > 0:
             baby1 = self.parents.pop()
             baby2 = self.parents.pop()
@@ -108,6 +112,7 @@ class Genetic():
             self.babies.append(baby2)
 
     def mutation(self):
+        "mutation to mitigate premature convergence"
         mutate_rate = 0.15
         for i in range(len(self.babies)):
             for j in range(len(self.babies[i])):
@@ -118,8 +123,8 @@ class Genetic():
 
 class Player(arcade.Sprite):
     "class for the player/s"
-
     def __init__(self, spawn, move_count, human, speed, coinList, goal, level):
+        "setup for player"
         super().__init__("assets/PLAYER.png", 1.15)
         self.reachedCoin = False
         self.alive = True
@@ -149,28 +154,40 @@ class Player(arcade.Sprite):
             self.currentCoin = self.coinList.pop(0)
 
     def distance(self, x_2, y_2):
+        "distance formula to get distance between player and goal"
         x_1 = self.center_x
         y_1 = self.center_y
         return ((((x_2 - x_1) ** 2) + (y_2 - y_1)) ** (1 / 2))
 
     def calcFitness(self):
+        # scoring function
+
+        # extra points if they got to the goal
+        # more points if they reached goal with less steps
         if self.reachedGoal:
             self.fitness = 1.0 / 16.0 + 10000.0 / (self.steps * self.steps)
+        # just based on distance if didn't reach goal
         else:
             approxDistance = self.distance(self.goal_x, self.goal_y)
+            # take away points if the dot died
             if self.DotDeath:
                 approxDistance *= 0.9
-            self.fitness = 1.0 / (approxDistance * approxDistance)
+            # fitess based on distance to the goal
+            self.fitness = 1.0 / (approxDistance ** 2)
         self.fitness *= self.fitness
+        # if they got to the yellow dot, add some points
         if self.reachedCoin:
             self.fitness *= 1.2
 
     def update(self, delta_time):
+        "update the player"
+        # move if alive
         if self.alive:
             if len(self.brain.directions) > 0:
                 self.move(delta_time)
             else:
                 self.alive = False
+        # calculate fitness and stop moving if dead
         if not self.alive:
             if self.fitness == 0:
                 self.calcFitness()
