@@ -143,7 +143,7 @@ class GameView(arcade.View):
             self.watching = True
             self.human = False
             self.player_count = 1
-            self.move_count = 150
+            self.move_count = 200
 
     def setup(self):
         "set up the game"
@@ -217,11 +217,11 @@ class GameView(arcade.View):
         if not self.allDead or self.human:
             for i, player in enumerate(self.player_list):
                 self.player_sprite = player
+                self.blue_hit()
                 if self.human:
                     self.move(delta_time)
                 else:
                     player.update(delta_time)
-                self.blue_hit()
                 self.collect_coins()
                 self.check_spawn()
                 self.check_win()
