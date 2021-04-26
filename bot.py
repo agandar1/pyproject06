@@ -3,7 +3,7 @@
 from random import randint, uniform
 import arcade
 import copy
-
+import time
 
 class playerBrain():
     def __init__(self, move_count):
@@ -26,9 +26,9 @@ class Genetic():
         self.players = player_list
         self.moves = move_count
 
-        for i in range(len(self.players)):
-            while len(self.players[i].directions) < self.moves:
-                self.players[i].directions.insert(0, randint(1, 9))
+        #for i in range(len(self.players)):
+        #    while len(self.players[i].directions) < self.moves:
+        #        self.players[i].directions.insert(0, randint(1, 9))
 
         for i in range(int(self.parents_count + 1)):
             self.killWorst()
@@ -38,37 +38,38 @@ class Genetic():
             self.directions.append(self.players[i].directions)
 
         self.total_fitness = self.totalFitness()
-
+    
     def saveBest(self):
         best = 0
+        index = 0
         for i in range(len(self.players)):
-            try:
-                if self.players[i].fitness > best:
-                    best = self.players[i].fitness
-            except:
-                print("Error while trying to find Best")
-                pass
-        for i in range(len(self.players)):
-            if self.players[i].fitness == best:
-                self.directions.append(copy.deepcopy(self.players[i].directions)) 
-                fileName = "saves/lvl" + str(self.players[i].level) + ".txt" 
-                with open(fileName, "w") as file:
-                    for directions in self.players[i].directions:
-                        file.write("%i " % directions)
-                break
+            if self.players[i].fitness > best:
+                best = self.players[i].fitness
+                index = i
+        self.directions.append(copy.deepcopy(self.players[index].directions))
+        fileName = "saves/lvl" + str(self.players[index].level) + ".txt"
+        with open(fileName, "w") as file:
+            for directions in self.players[index].directions:
+                file.write("%i " % directions)
+        
+        #for i in range(len(self.players)):
+        #    if self.players[i].fitness == best:
+        #        self.directions.append(copy.deepcopy(self.players[i].directions)) 
+        #        fileName = "saves/lvl" + str(self.players[i].level) + ".txt" 
+        #        with open(fileName, "w") as file:
+        #            for directions in self.players[i].directions:
+        #                file.write("%i " % directions)
+        #        break
 
     def killWorst(self):
-        least: int = 100
+        least = 100
+        index = 0
         for i in range(len(self.players)):
-            try:
-                if (self.players[i].fitness).real < least:
-                    least = self.players[i].fitness
-                    for i in range(len(self.players)):
-                        if self.players[i].fitness == least:
-                            self.players[i].kill()
-                            break
-            except:
-                pass
+            if (self.players[i].fitness).real < least:
+                least = self.players[i].fitness
+                index = i
+                    
+        self.players[index].kill()
 
     def newDirections(self):
         for i in range(self.parents_count):
@@ -78,7 +79,6 @@ class Genetic():
 
         for baby in self.babies:
             self.directions.append(baby)
-
         return self.directions
 
     def totalFitness(self):
@@ -180,9 +180,10 @@ class Player(arcade.Sprite):
         self.fitness *= self.fitness 
         if self.reachedCoin:
             self.fitness *= 1.2
-        
+        #by here instructions are wrong 
         #To print each player's fitness
-        #print("{:.12f}".format(self.fitness))
+        print("{:.12f}".format(self.fitness))
+        print(self.directions)
 
 
     def update(self, delta_time):
@@ -207,6 +208,7 @@ class Player(arcade.Sprite):
             direction = self.brain.directions.pop()
         else:
             direction = 9
+        #move 
         if direction == 1:
             self.change_x = self.speed * delta_time
             self.change_y = 0
@@ -235,3 +237,4 @@ class Player(arcade.Sprite):
             self.change_x = 0
             self.change_y = 0
         self.steps+= 1
+        #time.sleep(1)

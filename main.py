@@ -43,7 +43,7 @@ class ModeSelection(arcade.View):
         arcade.start_render()
         arcade.draw_text("Use the Arrow Keys to Select a Mode", WIDTH / 2, HEIGHT / 1.25, arcade.color.WHITE, font_size=30, anchor_x="center")
         arcade.draw_text(" < " + string + " > ", WIDTH / 2, HEIGHT / 2, arcade.color.WHITE, font_size=50, anchor_x="center")
-        arcade.draw_text("Click Anywhere Continue", WIDTH / 2, HEIGHT / 5, arcade.color.WHITE, font_size=30, anchor_x="center")
+        arcade.draw_text("Click Anywhere to Continue", WIDTH / 2, HEIGHT / 5, arcade.color.WHITE, font_size=30, anchor_x="center")
 
         arcade.set_background_color(arcade.csscolor.DARK_SLATE_BLUE)
         arcade.set_viewport(0, WIDTH - 1, 0, HEIGHT - 1)
@@ -78,7 +78,7 @@ class LevelSelection(arcade.View):
 
         arcade.draw_text("Use the Arrow Keys to Select a Level", WIDTH / 2, HEIGHT / 1.25, arcade.color.WHITE, font_size=30, anchor_x="center")
         arcade.draw_text(" < " + str(self.level) + " > ", WIDTH / 2, HEIGHT / 2, arcade.color.WHITE, font_size=50, anchor_x="center")
-        arcade.draw_text("Click Anywhere Continue", WIDTH / 2, HEIGHT / 5, arcade.color.WHITE, font_size=30, anchor_x="center")
+        arcade.draw_text("Click Anywhere to Continue", WIDTH / 2, HEIGHT / 5, arcade.color.WHITE, font_size=30, anchor_x="center")
 
         arcade.set_background_color(arcade.csscolor.DARK_SLATE_BLUE)
         arcade.set_viewport(0, WIDTH - 1, 0, HEIGHT - 1)
@@ -92,15 +92,19 @@ class LevelSelection(arcade.View):
 
     def on_key_press(self, symbol, modifiers):
         if symbol in (arcade.key.D, arcade.key.RIGHT):
-            if self.level == 10:
+            if self.level == 11:
                 self.level = 1
             else:
                 self.level += 1
         if symbol in (arcade.key.A, arcade.key.LEFT):
             if self.level == 1:
-                self.level = 10
+                self.level = 11
             else:
                 self.level -= 1
+        if symbol == arcade.key.B:
+            modeSelect = ModeSelection()
+            self.window.show_view(modeSelect)
+
 
 
 class GameView(arcade.View):
@@ -178,8 +182,8 @@ class GameView(arcade.View):
         for i in line:
             if i.isdigit():
                 load.append(int(i))
-            if (len(load) > 0) and self.generation == 1:
-                self.move_count = len(load)
+        if (len(load) > 0) and self.generation == 1:
+            self.move_count = len(load)
 
         # load the player
         for i in range(self.player_count):
@@ -201,7 +205,7 @@ class GameView(arcade.View):
         for sprite in self.player_list:
             physics_engine = arcade.PhysicsEnginePlatformer(sprite, self.wall_list, 0)
             self.engine_list.append(physics_engine)
-
+        
     def on_update(self, delta_time):
         self.blue_list.update()
         self.checkLife()
@@ -226,8 +230,8 @@ class GameView(arcade.View):
         self.generation += 1
         if not self.watching:
             print("generation:", self.generation)
-        gen = Genetic(copy.deepcopy(self.player_list), self.move_count)
-        new_directions = gen.newDirections()
+            gen = Genetic(copy.deepcopy(self.player_list), self.move_count)
+            new_directions = gen.newDirections()
         if self.generation % 5 == 0 and self.move_count <= 500:
             self.move_count += 10
         self.setup()
@@ -347,6 +351,17 @@ class GameView(arcade.View):
         if symbol == arcade.key.Q:
             modeSelect = ModeSelection()
             self.window.show_view(modeSelect)
+        if self.human:
+            if symbol == arcade.key.N:
+                if self.level == self.max_level:
+                    self.level = 1
+                    self.setup()
+                else:
+                    self.level = self.level+1
+                    self.setup()
+                
+
+
 
     def on_key_release(self, symbol, modifiers):
         if self.human or not self.human:
