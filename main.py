@@ -41,9 +41,11 @@ class ModeSelection(arcade.View):
             string = "Watch AI"
 
         arcade.start_render()
+
         arcade.draw_text("Use the Arrow Keys to Select a Mode", WIDTH / 2, HEIGHT / 1.25, arcade.color.WHITE, font_size=30, anchor_x="center")
         arcade.draw_text(" < " + string + " > ", WIDTH / 2, HEIGHT / 2, arcade.color.WHITE, font_size=50, anchor_x="center")
         arcade.draw_text("Click Anywhere to Continue", WIDTH / 2, HEIGHT / 5, arcade.color.WHITE, font_size=30, anchor_x="center")
+
 
         arcade.set_background_color(arcade.csscolor.DARK_SLATE_BLUE)
         arcade.set_viewport(0, WIDTH - 1, 0, HEIGHT - 1)
@@ -76,9 +78,11 @@ class LevelSelection(arcade.View):
         "Draw this view"
         arcade.start_render()
 
+
         arcade.draw_text("Use the Arrow Keys to Select a Level", WIDTH / 2, HEIGHT / 1.25, arcade.color.WHITE, font_size=30, anchor_x="center")
         arcade.draw_text(" < " + str(self.level) + " > ", WIDTH / 2, HEIGHT / 2, arcade.color.WHITE, font_size=50, anchor_x="center")
         arcade.draw_text("Click Anywhere to Continue", WIDTH / 2, HEIGHT / 5, arcade.color.WHITE, font_size=30, anchor_x="center")
+
 
         arcade.set_background_color(arcade.csscolor.DARK_SLATE_BLUE)
         arcade.set_viewport(0, WIDTH - 1, 0, HEIGHT - 1)
@@ -92,19 +96,18 @@ class LevelSelection(arcade.View):
 
     def on_key_press(self, symbol, modifiers):
         if symbol in (arcade.key.D, arcade.key.RIGHT):
-            if self.level == 11:
+            if self.level == 14:
                 self.level = 1
             else:
                 self.level += 1
         if symbol in (arcade.key.A, arcade.key.LEFT):
             if self.level == 1:
-                self.level = 11
+                self.level = 14
             else:
                 self.level -= 1
         if symbol == arcade.key.B:
             modeSelect = ModeSelection()
             self.window.show_view(modeSelect)
-
 
 
 class GameView(arcade.View):
@@ -123,7 +126,7 @@ class GameView(arcade.View):
     # game variables
     allDead = False
     level = 1
-    max_level = 10
+    max_level = 14
     generation = 1
 
     def __init__(self, mode):
@@ -169,7 +172,11 @@ class GameView(arcade.View):
             "7": levels.level7,
             "8": levels.level8,
             "9": levels.level9,
-            "10": levels.level10
+            "10": levels.level10,
+            "11": levels.level11,
+            "12": levels.level12,
+            "13": levels.level13,
+            "14": levels.level14,
         }
         my_map = arcade.tilemap.read_tmx(f"levels/lvl{level}.tmx")
         level_list[str(level)](self)
@@ -187,7 +194,8 @@ class GameView(arcade.View):
 
         # load the player
         for i in range(self.player_count):
-            player = Player(self.spawn_points[0], self.move_count, self.human, self.p_speed, self.level_coins[:], levels.goals[level - 1], level)
+            player = Player(self.spawn_points[0], self.move_count, self.human, self.p_speed, self.level_coins[:],
+                            levels.goals[level - 1], level)
             self.player_list.append(player)
 
         if not self.human and (self.watching or (not self.watching and self.generation == 1)):
@@ -316,11 +324,11 @@ class GameView(arcade.View):
             y1 = self.player_sprite.center_y
             x2 = self.spawn_points[0][0]
             y2 = self.spawn_points[0][1]
-            closest = ((x2 - x1)**2 + (y2 - y1)**2) ** (0.5)
+            closest = ((x2 - x1) ** 2 + (y2 - y1) ** 2) ** (0.5)
             for i, point in enumerate(self.spawn_points):
                 x2 = point[0]
                 y2 = point[1]
-                distance = math.sqrt((x2 - x1)**2 + (y2 - y1)**2)
+                distance = math.sqrt((x2 - x1) ** 2 + (y2 - y1) ** 2)
                 if distance < closest:
                     closest = distance
                     delete_to = i
@@ -360,9 +368,6 @@ class GameView(arcade.View):
                     self.level = self.level+1
                     self.setup()
                 
-
-
-
     def on_key_release(self, symbol, modifiers):
         if self.human or not self.human:
             if symbol in (arcade.key.D, arcade.key.RIGHT):
