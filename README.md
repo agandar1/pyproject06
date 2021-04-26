@@ -113,22 +113,19 @@ For the program to run, you need to have python3 and the arcade library installe
 ## Progress
 
 * This is what we have accomplished so far:
-    * 8 levels of the game complete
+    * 14 levels of the game complete
     * Collisions with walls, enemies, and coins work
     * Enemy dots can follow a path or go in a circle
     * Player death and respawn works
     * Checkpoint system works
     * Winning a level works
+    * Title screen and menu screens
+    * Genetic algorithm implemented
 
-* This is what we still have to add:
-    * All of the AI system
+* This is what we still have to do:
+    * Make the algorithm better
+  
 
-* Features we would like but are not priority:
-    * Extra game levels
-    * A title screen
-    * A menu to choose level
-  
-  
 
 <!-- CONTACT -->
 ## Contact
