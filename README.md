@@ -10,7 +10,7 @@
     <img src="images/python.png" alt="Logo" width="80" height="80">
   </a>
 
-  <h3 align="center">World's Hardest Game AI</h3>
+  <h3 align="center">Game Solver</h3>
 
   <p align="center">
     Python Project for CSCI-3329-90L-Spring2021
